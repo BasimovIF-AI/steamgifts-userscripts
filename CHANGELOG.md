@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [GreasyFork Universal Bridge & CLI - 2.1.0] - 2026-09-27
+### Added
+- **Universal Bridge UserScript** (`tools/greasyfork-auto-publisher.user.js` v2.1.0):
+  - Completely detached from hardcoded scripts — acts as a universal automation agent bridge for any userscript.
+  - Supports local machine transport via `http://127.0.0.1:18234` and remote GitHub raw URLs.
+  - Native page script injection for 100% reliable CodeMirror text injection and saving.
+  - Automated chaining: redirects from newly created script to `/admin` to populate rich Markdown descriptions.
+  - Automatic handling of duplicate code warnings (`allow_code_previously_posted`).
+- **Agent CLI** (`tools/greasyfork-cli.js`):
+  - Command-line tool enabling the AI assistant to publish and update any script with one command.
+  - Single mode (`--file`, `--desc`, `--id`, `--action`) and batch mode (`--all`).
+
+---
+
 ## [GreasyFork Auto-Publisher Tool - 1.3.0] - 2026-09-27
 ### Added
 - Local publisher hub `publish_to_greasyfork.html` with 1-click clipboard copy for code and rich Markdown descriptions.

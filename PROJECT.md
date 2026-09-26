@@ -8,7 +8,8 @@
 | `steamgifts-group-stats-checker.user.js` | Userscript | `https://www.steamgifts.com/giveaway/*` | Запрос и сверка статистики пользователя в группах раздачи + авто-комментарий автору. |
 | `steamgifts-region-auto-selector.user.js` | Userscript | `.../giveaways/new` & `steamdb.info/sub/*` | Автоматизация выбора регионов при создании раздачи через временную вкладку SteamDB. |
 | `steamgifts-unlucky-7-winner-stats-copy.user.js` | Userscript | `.../giveaway/*/winners` | Проверка баланса участников группы Unlucky-7 и копирование форматированной строки. |
-| `tools/greasyfork-auto-publisher.user.js` | Tool / Userscript | `greasyfork.org/*` | Автоматизация публикации, обновления и оформления Markdown-описания на GreasyFork. |
+| `tools/greasyfork-auto-publisher.user.js` | Tool / Userscript | `greasyfork.org/*` | Универсальный мост авто-публикации (Universal Bridge v2.1.0) для работы с GreasyFork. |
+| `tools/greasyfork-cli.js` | CLI Tool / Node.js | Console | Консольная утилита агента для автоматической публикации любых скриптов с ПК и GitHub. |
 | `publish_to_greasyfork.html` | Tool / Hub | Local Browser | Центр управления публикацией и копирования кода / описаний в 1 клик. |
 | `README.md` | Doc | — | Каталог скриптов, инструкции по установке (EN). |
 | `README.ru.md` | Doc | — | Каталог скриптов, инструкции по установке (RU). |
