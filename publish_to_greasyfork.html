@@ -2,1148 +2,234 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Публикация скриптов SteamGifts на GreasyFork</title>
+    <title>Публикатор скриптов SteamGifts на GreasyFork</title>
     <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background: #0f172a; color: #f8fafc; padding: 30px; margin: 0; line-height: 1.5; }
-        .container { max-width: 860px; margin: 0 auto; }
-        h1 { font-size: 26px; margin-bottom: 8px; color: #38bdf8; display: flex; align-items: center; gap: 10px; }
-        p.subtitle { color: #94a3b8; margin-top: 0; margin-bottom: 24px; font-size: 15px; }
-        .card { background: #1e293b; border: 1px solid #334155; border-radius: 10px; padding: 20px; margin-bottom: 16px; transition: border-color 0.2s; }
-        .card:hover { border-color: #38bdf8; }
-        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-        .title { font-size: 18px; font-weight: 600; color: #f1f5f9; }
-        .badge { font-size: 12px; padding: 2px 8px; border-radius: 9999px; font-weight: 500; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: #0f172a;
+            color: #f8fafc;
+            padding: 30px 20px;
+            margin: 0;
+            line-height: 1.5;
+        }
+        .container {
+            max-width: 860px;
+            margin: 0 auto;
+        }
+        h1 {
+            font-size: 26px;
+            margin-bottom: 6px;
+            color: #38bdf8;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        p.subtitle {
+            color: #94a3b8;
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 15px;
+        }
+        .info-box {
+            background: #1e3a8a33;
+            border: 1px solid #1d4ed8;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 24px;
+            font-size: 14px;
+            color: #93c5fd;
+            line-height: 1.6;
+        }
+        .info-box ol {
+            margin: 8px 0 0 0;
+            padding-left: 20px;
+        }
+        .info-box li {
+            margin-bottom: 4px;
+        }
+        .card {
+            background: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 18px;
+            transition: border-color 0.2s;
+        }
+        .card:hover {
+            border-color: #38bdf8;
+        }
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        .title {
+            font-size: 18px;
+            font-weight: 600;
+            color: #f1f5f9;
+        }
+        .badges {
+            display: flex;
+            gap: 6px;
+        }
+        .badge {
+            font-size: 12px;
+            padding: 2px 8px;
+            border-radius: 9999px;
+            font-weight: 500;
+        }
         .badge-ver { background: #0284c7; color: white; }
-        .badge-lang { background: #059669; color: white; margin-left: 6px; }
-        .desc { color: #cbd5e1; font-size: 14px; margin-bottom: 15px; }
-        .btn { background: #2563eb; color: white; border: none; padding: 10px 20px; border-radius: 6px; font-size: 14px; font-weight: 500; cursor: pointer; transition: background 0.2s; display: inline-flex; align-items: center; gap: 8px; text-decoration: none; }
-        .btn:hover { background: #1d4ed8; }
-        .btn-update { background: #d97706; }
-        .btn-update:hover { background: #b45309; }
-        .info-box { background: #1e3a8a33; border: 1px solid #1d4ed8; border-radius: 8px; padding: 14px; margin-bottom: 24px; font-size: 14px; color: #93c5fd; }
-        textarea { display: none; }
+        .badge-lang { background: #059669; color: white; }
+        .desc {
+            color: #cbd5e1;
+            font-size: 14px;
+            margin-bottom: 16px;
+        }
+        .actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            align-items: center;
+        }
+        .btn {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+        .btn:hover {
+            background: #1d4ed8;
+        }
+        .btn-copy {
+            background: #0284c7;
+        }
+        .btn-copy:hover {
+            background: #0369a1;
+        }
+        .btn-copied {
+            background: #16a34a !important;
+            color: white;
+        }
+        .btn-update {
+            background: #d97706;
+        }
+        .btn-update:hover {
+            background: #b45309;
+        }
     </style>
 </head>
 <body>
 <div class="container">
     <h1>🚀 Публикатор скриптов SteamGifts на GreasyFork</h1>
-    <p class="subtitle">Нажмите на кнопку нужного скрипта — страница GreasyFork откроется в новой вкладке с уже предзаполненным кодом и метаданными. Вам останется только нажать <b>«Опубликовать»</b> на сайте!</p>
+    <p class="subtitle">Браузеры блокируют сторонние POST-запросы с локальных файлов для защиты cookies (SameSite policy). Поэтому здесь сделано удобное копирование в 2 клика!</p>
 
     <div class="info-box">
-        💡 <b>Обратите внимание:</b> Во всех 4 скриптах уже настроена полная двуязычность (<code>@name:ru</code>, <code>@description:ru</code>). Они будут мгновенно находиться в поиске GreasyFork как на русском, так и на английском языке!
+        <b>📌 Как опубликовать любой скрипт за 10 секунд:</b>
+        <ol>
+            <li>Нажмите <b>«📋 Скопировать код скрипта»</b> (код скрипта мгновенно окажется в буфере обмена).</li>
+            <li>Нажмите <b>«🔗 Открыть форму GreasyFork»</b> (откроется страница создания, где вы уже залогинены).</li>
+            <li>Вставьте код нажатием <b>Ctrl + V</b> и нажмите зелёную кнопку <b>«Опубликовать скрипт»</b> внизу страницы!</li>
+        </ol>
+        <i>* Все названия, версии и двуязычные описания (@name:ru, @description:ru) GreasyFork заполнит автоматически из вставленного кода.</i>
     </div>
 
     <!-- Script 1 -->
     <div class="card">
         <div class="card-header">
             <div class="title">1. SteamGifts - Chance Per Point (‱) / Шанс на очко</div>
-            <div>
+            <div class="badges">
                 <span class="badge badge-ver">v7.0.0</span>
                 <span class="badge badge-lang">RU + EN</span>
             </div>
         </div>
         <div class="desc">Расчёт шанса на 1 очко в базисных пунктах (‱) и фильтр скрытия раздач на странице участий.</div>
-        <form action="https://greasyfork.org/ru/script_versions/prefill" method="POST" enctype="multipart/form-data" target="_blank">
-            <textarea name="script_version[code]">// ==UserScript==
-// @name         SteamGifts - Chance Per Point (‱)
-// @name:ru      SteamGifts - Шанс на очко (‱)
-// @namespace    https://greasyfork.org/users/1522624-basimovif-ai
-// @version      7.0.0
-// @description  Adds a win chance per point column in basis points (‱) and enables hiding giveaways above a chosen threshold on SteamGifts entered page.
-// @description:ru Добавляет столбец с шансом на победу на одно очко в базисных пунктах (‱) и позволяет скрывать раздачи с шансом выше заданного значения.
-// @author       basimovif-ai
-// @license      MIT
-// @homepageURL  https://github.com/BasimovIF-AI/steamgifts-userscripts
-// @supportURL   https://github.com/BasimovIF-AI/steamgifts-userscripts/issues
-// @match        https://www.steamgifts.com/giveaways/entered*
-// @grant        GM_addStyle
-// @run-at       document-end
-// ==/UserScript==
-
-(function() {
-    &#039;use strict&#039;;
-
-    const isRu = (navigator.language || &#039;&#039;).toLowerCase().startsWith(&#039;ru&#039;);
-    const i18n = {
-        filterLabel: isRu ? &#039;Фильтр по шансу: скрыть всё, что выше&#039; : &#039;Win Chance Filter: hide entries above&#039;,
-        filterBtn: isRu ? &#039;Фильтровать&#039; : &#039;Filter&#039;,
-        resetBtn: isRu ? &#039;Сбросить&#039; : &#039;Reset&#039;,
-        colHeader: isRu ? &#039;Шанс/Очко (‱)&#039; : &#039;Chance/Pt (‱)&#039;,
-        colHeaderTitle: isRu
-            ? &#039;Шанс на победу за одно очко ((Копии / (Участники * Очки)) * 10000‱)&#039;
-            : &#039;Win chance per single point ((Copies / (Entries * Points)) * 10000‱)&#039;,
-        errorText: isRu ? &#039;Ошибка&#039; : &#039;Error&#039;,
-    };
-
-    // Стили для панели управления
-    GM_addStyle(`
-        .sg-chance-filter-panel {
-            background-color: #f0f2f5;
-            padding: 10px;
-            margin-bottom: 15px;
-            border-radius: 5px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .sg-chance-filter-panel input {
-            border: 1px solid #ccc;
-            padding: 5px;
-            border-radius: 3px;
-            width: 80px;
-        }
-        .sg-chance-filter-panel button {
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            padding: 6px 12px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 14px;
-            cursor: pointer;
-            border-radius: 3px;
-        }
-        .sg-chance-filter-panel button.reset {
-            background-color: #f44336;
-        }
-    `);
-
-    // --- ФУНКЦИИ ФИЛЬТРАЦИИ ---
-
-    function applyFilter() {
-        const filterValueInput = document.getElementById(&#039;chance-filter-input&#039;);
-        if (!filterValueInput) return;
-
-        // Получаем значение (максимальный порог) и конвертируем его из ‱ в чистое число
-        const maxPerMyriad = parseFloat(filterValueInput.value);
-        if (isNaN(maxPerMyriad)) {
-            resetFilter();
-            return;
-        }
-        const maxChance = maxPerMyriad / 10000.0; // Делим на 10000
-
-        const allRows = document.querySelectorAll(&#039;.table__row-outer-wrap&#039;);
-        allRows.forEach(rowWrapper =&gt; {
-            const innerRow = rowWrapper.querySelector(&#039;.table__row-inner-wrap&#039;);
-            const rowChance = parseFloat(innerRow.dataset.chancePerPoint);
-
-            if (!isNaN(rowChance) &amp;&amp; rowChance &gt; maxChance) {
-                rowWrapper.style.display = &#039;none&#039;;
-            } else {
-                rowWrapper.style.display = &#039;&#039;;
-            }
-        });
-    }
-
-    function resetFilter() {
-        const filterValueInput = document.getElementById(&#039;chance-filter-input&#039;);
-        if (filterValueInput) filterValueInput.value = &#039;&#039;;
-
-        const allRows = document.querySelectorAll(&#039;.table__row-outer-wrap&#039;);
-        allRows.forEach(rowWrapper =&gt; {
-            rowWrapper.style.display = &#039;&#039;;
-        });
-    }
-
-    // --- ОСНОВНАЯ ЛОГИКА ---
-    function createFilterPanel() {
-        if (document.getElementById(&#039;chance-filter-panel&#039;)) return;
-
-        const container = document.querySelector(&#039;.table&#039;);
-        if (!container) return;
-
-        const panel = document.createElement(&#039;div&#039;);
-        panel.id = &#039;chance-filter-panel&#039;;
-        panel.className = &#039;sg-chance-filter-panel&#039;;
-        panel.innerHTML = `
-            &lt;label for=&quot;chance-filter-input&quot;&gt;&lt;b&gt;${i18n.filterLabel}&lt;/b&gt;&lt;/label&gt;
-            &lt;input type=&quot;number&quot; id=&quot;chance-filter-input&quot; placeholder=&quot;1.00&quot; step=&quot;0.01&quot;&gt;
-            &lt;span&gt;‱&lt;/span&gt;
-            &lt;button id=&quot;apply-chance-filter&quot;&gt;${i18n.filterBtn}&lt;/button&gt;
-            &lt;button id=&quot;reset-chance-filter&quot; class=&quot;reset&quot;&gt;${i18n.resetBtn}&lt;/button&gt;
-        `;
-
-        container.parentNode.insertBefore(panel, container);
-
-        document.getElementById(&#039;apply-chance-filter&#039;).addEventListener(&#039;click&#039;, applyFilter);
-        document.getElementById(&#039;reset-chance-filter&#039;).addEventListener(&#039;click&#039;, resetFilter);
-    }
-
-    function processGiveaways() {
-        const header = document.querySelector(&#039;.table__heading&#039;);
-        const giveaways = document.querySelectorAll(&#039;.table__row-inner-wrap:not(.chance-processed)&#039;);
-
-        if (!header || giveaways.length === 0) {
-            return;
-        }
-
-        if (!header.querySelector(&#039;.chance-per-point-header&#039;)) {
-            const newHeaderCell = document.createElement(&#039;div&#039;);
-            newHeaderCell.className = &#039;table__column--width-small text-center chance-per-point-header&#039;;
-            newHeaderCell.textContent = i18n.colHeader;
-            newHeaderCell.title = i18n.colHeaderTitle;
-            header.appendChild(newHeaderCell);
-
-            const allRowsForGrid = document.querySelectorAll(&#039;.table__heading, .table__row-inner-wrap&#039;);
-            allRowsForGrid.forEach(row =&gt; {
-                if(!row.style.gridTemplateColumns.endsWith(&#039;110px&#039;)) {
-                    const currentGridStyle = window.getComputedStyle(row).gridTemplateColumns;
-                    row.style.gridTemplateColumns = currentGridStyle + &#039; 110px&#039;;
-                }
-            });
-        }
-
-        giveaways.forEach(row =&gt; {
-            try {
-                const titleElement = row.querySelector(&#039;a.table__column__heading&#039;);
-                if (!titleElement) {
-                    row.classList.add(&#039;chance-processed&#039;);
-                    return;
-                }
-                const titleText = titleElement.textContent;
-
-                const pointsMatch = titleText.match(/\((\d+)P\)/);
-                const points = pointsMatch ? parseInt(pointsMatch[1], 10) : NaN;
-
-                const copiesMatch = titleText.match(/\((\d+)\sCopies\)/);
-                const copies = copiesMatch ? parseInt(copiesMatch[1], 10) : 1;
-
-                let entries = NaN;
-                const columns = row.querySelectorAll(&#039;.table__row-inner-wrap &gt; div.table__column--width-small&#039;);
-                for (const col of columns) {
-                    if (/^[\d,]+$/.test(col.textContent.trim())) {
-                         entries = parseInt(col.textContent.trim().replace(/,/g, &#039;&#039;), 10);
-                         break;
-                    }
-                }
-
-                let chanceText = &#039;N/A&#039;;
-                let rawChance = 0;
-
-                if (!isNaN(entries) &amp;&amp; entries &gt; 0 &amp;&amp; !isNaN(points) &amp;&amp; points &gt; 0 &amp;&amp; copies &gt; 0) {
-                    const chance = copies / (entries * points);
-                    rawChance = chance;
-                    chanceText = (chance * 10000).toFixed(2) + &#039;‱&#039;;
-                }
-
-                row.dataset.chancePerPoint = rawChance;
-
-                const newCell = document.createElement(&#039;div&#039;);
-                newCell.className = &#039;table__column--width-small text-center&#039;;
-                newCell.textContent = chanceText;
-                row.appendChild(newCell);
-
-            } catch (e) {
-                console.error(&#039;SteamGifts Chance Per Point: error processing row:&#039;, row, e);
-                row.dataset.chancePerPoint = 0;
-                const errorCell = document.createElement(&#039;div&#039;);
-                errorCell.className = &#039;table__column--width-small text-center&#039;;
-                errorCell.textContent = i18n.errorText;
-                row.appendChild(errorCell);
-            } finally {
-                row.classList.add(&#039;chance-processed&#039;);
-            }
-        });
-    }
-
-    // --- ИНИЦИАЛИЗАЦИЯ И НАБЛЮДЕНИЕ ЗА ИЗМЕНЕНИЯМИ ---
-    const observer = new MutationObserver((mutationsList) =&gt; {
-        for(const mutation of mutationsList) {
-            if (mutation.addedNodes.length &gt; 0) {
-                 const hasNewRows = Array.from(mutation.addedNodes).some(node =&gt; node.nodeType === 1 &amp;&amp; node.classList.contains(&#039;table__row-outer-wrap&#039;));
-                 if(hasNewRows){
-                    setTimeout(() =&gt; {
-                        processGiveaways();
-                        if (document.getElementById(&#039;chance-filter-input&#039;).value) {
-                            applyFilter();
-                        }
-                    }, 200);
-                    return;
-                }
-            }
-        }
-    });
-
-    const targetNode = document.querySelector(&#039;.table&#039;);
-    if (targetNode) {
-        observer.observe(targetNode, { childList: true, subtree: true });
-    }
-
-    setTimeout(() =&gt; {
-        createFilterPanel();
-        processGiveaways();
-    }, 500);
-
-})();
-</textarea>
-            <button type="submit" class="btn">✨ Открыть предзаполненный Chance Per Point на GreasyFork</button>
-        </form>
+        <div class="actions">
+            <button class="btn btn-copy" onclick="copyCode(this, 1)">📋 Скопировать код v7.0.0</button>
+            <a class="btn" href="https://greasyfork.org/ru/script_versions/new" target="_blank">🔗 Открыть форму GreasyFork</a>
+        </div>
     </div>
 
     <!-- Script 2 -->
     <div class="card">
         <div class="card-header">
             <div class="title">2. SteamGifts - Group Stats Checker / Статистика в группах</div>
-            <div>
+            <div class="badges">
                 <span class="badge badge-ver">v1.7.0</span>
                 <span class="badge badge-lang">RU + EN</span>
             </div>
         </div>
         <div class="desc">Интерактивная проверка баланса в группах раздачи и автозаполнение комментария благодарности создателю.</div>
-        <form action="https://greasyfork.org/ru/script_versions/prefill" method="POST" enctype="multipart/form-data" target="_blank">
-            <textarea name="script_version[code]">// ==UserScript==
-// @name         SteamGifts - Group Stats Checker (Universal)
-// @name:ru      SteamGifts - Проверка статистики в группах (Универсальный)
-// @namespace    https://greasyfork.org/users/1522624-basimovif-ai
-// @version      1.7.0
-// @description  Displays interactive group stat buttons on giveaway pages and autofills thank-you comments for giveaway creator.
-// @description:ru Отображает кнопки статистики групп на страницах раздач и автоматически заполняет благодарность создателю раздачи.
-// @author       basimovif-ai
-// @license      MIT
-// @homepageURL  https://github.com/BasimovIF-AI/steamgifts-userscripts
-// @supportURL   https://github.com/BasimovIF-AI/steamgifts-userscripts/issues
-// @match        https://www.steamgifts.com/giveaway/*
-// @grant        none
-// ==/UserScript==
-
-(function() {
-    &#039;use strict&#039;;
-
-    const isRu = (navigator.language || &#039;&#039;).toLowerCase().startsWith(&#039;ru&#039;);
-    const i18n = {
-        btnTitle: (groupName) =&gt; isRu ? `Проверить мою статистику в группе: ${groupName}` : `Check my stats in group: ${groupName}`,
-        formulaTitle: isRu ? &#039;Нажмите для формулы расчета&#039; : &#039;Click to toggle calculation formula&#039;,
-        notFound: isRu ? &#039;(не найден)&#039; : &#039;(not found)&#039;,
-        error: isRu ? &#039;Ошибка&#039; : &#039;Error&#039;,
-        networkError: isRu ? &#039;Ошибка сети при запросе к группе&#039; : &#039;Network error fetching group stats&#039;,
-    };
-
-    // Проверяем, что находимся на главной странице раздачи (исключаем подразделы)
-    const pathParts = window.location.pathname.split(&#039;/&#039;).filter(Boolean);
-    if (pathParts.length !== 2 &amp;&amp; !(pathParts.length === 3 &amp;&amp; pathParts[0] === &#039;giveaway&#039;)) {
-        // Поддерживает и /giveaway/:id/:slug, и стандартный формат
-        if (pathParts[0] !== &#039;giveaway&#039;) return;
-        if (pathParts.length &gt; 3) return; // Исключаем /winners, /entries и т.д.
-    }
-
-    const origin = window.location.origin;
-
-    // Вспомогательные функции парсинга
-    const parseSentRec = (text) =&gt; {
-        const cleaned = text.replace(/,/g, &#039;&#039;);
-        const m = cleaned.match(/([\d.]+)\s*\(\$([\d.]+)\)/);
-        return m ? [parseFloat(m[1]), parseFloat(m[2])] : [0, 0];
-    };
-
-    const parseDiff = (text) =&gt; {
-        return parseFloat(text.replace(/[^0-9.-]/g, &#039;&#039;));
-    };
-
-    // Кэш для общего количества побед текущего пользователя
-    let cachedGiftsWon = null;
-
-    async function fetchGiftsWon(username) {
-        if (cachedGiftsWon !== null) return cachedGiftsWon;
-        try {
-            const r = await fetch(`${origin}/user/${username}`);
-            if (!r.ok) return 0;
-            const html = await r.text();
-            const parser = new DOMParser();
-            const doc = parser.parseFromString(html, &#039;text/html&#039;);
-            const profileRows = doc.querySelectorAll(&#039;.featured__table__row&#039;);
-            for (const pRow of profileRows) {
-                const left = pRow.querySelector(&#039;.featured__table__row__left&#039;);
-                if (left &amp;&amp; left.textContent.trim() === &#039;Gifts Won&#039;) {
-                    const right = pRow.querySelector(&#039;.featured__table__row__right a&#039;);
-                    if (right) {
-                        cachedGiftsWon = parseInt(right.textContent.replace(/,/g, &#039;&#039;), 10);
-                        return cachedGiftsWon;
-                    }
-                }
-            }
-        } catch (e) {
-            console.error(&#039;SteamGifts Group Stats: error fetching Gifts Won:&#039;, e);
-        }
-        return 0;
-    }
-
-    // Запрос статистики пользователя внутри конкретной группы
-    async function fetchGroupStats(groupPath, username) {
-        const groupSearchUrl = `${origin}${groupPath}/users/search?q=${encodeURIComponent(username)}`;
-        const r = await fetch(groupSearchUrl);
-        if (!r.ok) throw new Error(i18n.networkError);
-        const html = await r.text();
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(html, &#039;text/html&#039;);
-        const memberRows = doc.querySelectorAll(&#039;.table__rows .table__row-outer-wrap&#039;);
-
-        for (const memberRow of memberRows) {
-            const nameEl = memberRow.querySelector(&#039;.table__column__heading&#039;);
-            if (nameEl &amp;&amp; nameEl.textContent.trim().toLowerCase() === username.toLowerCase()) {
-                const cols = memberRow.querySelectorAll(&#039;.table__column--width-small.text-center&#039;);
-                if (cols.length &gt;= 4) {
-                    return {
-                        sentText: cols[0].textContent.trim(),
-                        recText: cols[1].textContent.trim(),
-                        siteGiftDiffStr: cols[2].textContent.trim(),
-                        siteValueDiffStr: cols[3].textContent.trim()
-                    };
-                }
-            }
-        }
-        return null; // Пользователь не найден в группе
-    }
-
-    async function init() {
-        // 1. Поиск имени текущего пользователя на странице
-        const avatarEl = document.querySelector(&#039;a.nav__avatar-outer-wrap[href^=&quot;/user/&quot;]&#039;);
-        if (!avatarEl) return;
-        const username = avatarEl.getAttribute(&#039;href&#039;).replace(&#039;/user/&#039;, &#039;&#039;);
-
-        // 2. Поиск создателя раздачи
-        const creatorLink = document.querySelector(&#039;.featured__columns a[href^=&quot;/user/&quot;]:not(.featured_giveaway_image_avatar)&#039;);
-        const creatorName = creatorLink ? creatorLink.textContent.trim() : null;
-
-        // 3. Автозаполнение комментария, если поле присутствует и оно пустое
-        if (creatorName) {
-            const commentTextarea = document.querySelector(&#039;textarea[name=&quot;description&quot;]&#039;);
-            if (commentTextarea &amp;&amp; commentTextarea.value.trim() === &quot;&quot;) {
-                commentTextarea.value = `Thanks a lot ${creatorName}!`;
-            }
-        }
-
-        // 4. Поиск ссылки на страницу со списком групп раздачи
-        const groupLinkEl = document.querySelector(&#039;a.featured__column--group&#039;);
-        if (!groupLinkEl) return;
-
-        const groupsPageUrl = origin + groupLinkEl.getAttribute(&#039;href&#039;);
-
-        // Создаем контейнер для кнопок рядом с индикатором групп
-        const container = document.createElement(&#039;span&#039;);
-        container.className = &#039;sg-group-stats-wrapper&#039;;
-        container.style.marginLeft = &#039;10px&#039;;
-        container.style.display = &#039;inline-flex&#039;;
-        container.style.gap = &#039;6px&#039;;
-        container.style.alignItems = &#039;center&#039;;
-        groupLinkEl.parentNode.insertBefore(container, groupLinkEl.nextSibling);
-
-        try {
-            // Загружаем вспомогательную страницу со списком групп раздачи
-            const r = await fetch(groupsPageUrl);
-            if (!r.ok) return;
-            const html = await r.text();
-            const parser = new DOMParser();
-            const doc = parser.parseFromString(html, &#039;text/html&#039;);
-
-            // Находим все текстовые ссылки на группы (они ведут на /group/...)
-            const groupLinks = doc.querySelectorAll(&#039;.table__rows a.table__column__heading[href^=&quot;/group/&quot;]&#039;);
-
-            const groups = [];
-            groupLinks.forEach(el =&gt; {
-                const href = el.getAttribute(&#039;href&#039;);
-                const name = el.textContent.trim();
-                if (href &amp;&amp; name) {
-                    groups.push({ name, path: href });
-                }
-            });
-
-            // Для каждой обнаруженной группы создаем интерактивную кнопку
-            groups.forEach(group =&gt; {
-                const btn = document.createElement(&#039;button&#039;);
-                btn.style.background = &#039;#4b5668&#039;;
-                btn.style.color = &#039;#d2d6da&#039;;
-                btn.style.border = &#039;none&#039;;
-                btn.style.padding = &#039;2px 6px&#039;;
-                btn.style.borderRadius = &#039;3px&#039;;
-                btn.style.fontSize = &#039;11px&#039;;
-                btn.style.cursor = &#039;pointer&#039;;
-                btn.style.display = &#039;inline-flex&#039;;
-                btn.style.alignItems = &#039;center&#039;;
-                btn.style.gap = &#039;4px&#039;;
-                btn.style.fontFamily = &#039;inherit&#039;;
-                btn.style.transition = &#039;background 0.2s&#039;;
-                btn.title = i18n.btnTitle(group.name);
-                btn.innerHTML = `&lt;i class=&quot;fa fa-bar-chart&quot;&gt;&lt;/i&gt; ${group.name}`;
-
-                btn.addEventListener(&#039;mouseenter&#039;, () =&gt; btn.style.background = &#039;#5a687c&#039;);
-                btn.addEventListener(&#039;mouseleave&#039;, () =&gt; btn.style.background = &#039;#4b5668&#039;);
-
-                btn.addEventListener(&#039;click&#039;, async (e) =&gt; {
-                    e.preventDefault();
-                    btn.disabled = true;
-                    btn.innerHTML = `&lt;i class=&quot;fa fa-refresh fa-spin&quot;&gt;&lt;/i&gt; ${group.name}`;
-
-                    try {
-                        const [userData, giftsWon] = await Promise.all([
-                            fetchGroupStats(group.path, username),
-                            fetchGiftsWon(username)
-                        ]);
-
-                        const resultContainer = document.createElement(&#039;span&#039;);
-                        resultContainer.style.fontSize = &#039;12px&#039;;
-                        resultContainer.style.display = &#039;inline-flex&#039;;
-                        resultContainer.style.alignItems = &#039;center&#039;;
-                        resultContainer.style.gap = &#039;4px&#039;;
-
-                        const label = document.createElement(&#039;span&#039;);
-                        label.textContent = `${group.name}:`;
-                        label.style.fontWeight = &#039;bold&#039;;
-                        label.style.color = &#039;#7f8c8d&#039;;
-                        resultContainer.appendChild(label);
-
-                        if (userData) {
-                            // Расчет и отрисовка интерактивной статистики
-                            const [sentCount, sentValue] = parseSentRec(userData.sentText);
-                            const [recCount, recValue] = parseSentRec(userData.recText);
-                            const siteGiftDiff = parseDiff(userData.siteGiftDiffStr);
-                            const siteValueDiff = parseDiff(userData.siteValueDiffStr);
-
-                            const calculatedGiftDiff = sentCount - recCount;
-                            const calculatedValueDiff = sentValue - recValue;
-
-                            const isGiftMatch = Math.abs(calculatedGiftDiff - siteGiftDiff) &lt; 0.05;
-                            const isValueMatch = Math.abs(calculatedValueDiff - siteValueDiff) &lt; 0.05;
-
-                            const giftColor = isGiftMatch ? &#039;#2e7d32&#039; : &#039;#c62828&#039;;
-                            const valueColor = isValueMatch ? &#039;#2e7d32&#039; : &#039;#c62828&#039;;
-
-                            const statsSpan = document.createElement(&#039;span&#039;);
-                            statsSpan.style.cursor = &#039;pointer&#039;;
-                            statsSpan.style.fontWeight = &#039;bold&#039;;
-                            statsSpan.style.userSelect = &#039;none&#039;;
-                            statsSpan.style.color = &#039;#7f8c8d&#039;;
-                            statsSpan.style.transition = &#039;opacity 0.15s ease&#039;;
-                            statsSpan.title = i18n.formulaTitle;
-
-                            const renderStats = (expanded) =&gt; {
-                                statsSpan.innerHTML = &#039;&#039;;
-                                statsSpan.appendChild(document.createTextNode(&#039;(&#039;));
-
-                                if (expanded) {
-                                    const formula = document.createElement(&#039;span&#039;);
-                                    formula.textContent = `${sentCount}-${recCount}=`;
-                                    statsSpan.appendChild(formula);
-                                }
-                                const giftResult = document.createElement(&#039;span&#039;);
-                                giftResult.textContent = userData.siteGiftDiffStr;
-                                giftResult.style.color = giftColor;
-                                statsSpan.appendChild(giftResult);
-
-                                statsSpan.appendChild(document.createTextNode(&#039;; &#039;));
-
-                                if (expanded) {
-                                    const formula = document.createElement(&#039;span&#039;);
-                                    formula.textContent = `$${sentValue}-$${recValue}=`;
-                                    statsSpan.appendChild(formula);
-                                }
-                                const valueResult = document.createElement(&#039;span&#039;);
-                                valueResult.textContent = userData.siteValueDiffStr;
-                                valueResult.style.color = valueColor;
-                                statsSpan.appendChild(valueResult);
-
-                                statsSpan.appendChild(document.createTextNode(&#039;)&#039;));
-
-                                if (expanded) {
-                                    const winsSpan = document.createElement(&#039;span&#039;);
-                                    winsSpan.textContent = ` ${giftsWon}`;
-                                    statsSpan.appendChild(winsSpan);
-                                }
-                            };
-
-                            let isExpanded = false;
-                            renderStats(isExpanded);
-
-                            statsSpan.addEventListener(&#039;mouseenter&#039;, () =&gt; { statsSpan.style.opacity = &#039;0.7&#039;; });
-                            statsSpan.addEventListener(&#039;mouseleave&#039;, () =&gt; { statsSpan.style.opacity = &#039;1&#039;; });
-                            statsSpan.addEventListener(&#039;click&#039;, (ev) =&gt; {
-                                ev.preventDefault();
-                                isExpanded = !isExpanded;
-                                renderStats(isExpanded);
-                            });
-
-                            resultContainer.appendChild(statsSpan);
-                        } else {
-                            const notMember = document.createElement(&#039;span&#039;);
-                            notMember.textContent = i18n.notFound;
-                            notMember.style.color = &#039;#7f8c8d&#039;;
-                            notMember.style.fontStyle = &#039;italic&#039;;
-                            resultContainer.appendChild(notMember);
-                        }
-
-                        btn.replaceWith(resultContainer);
-                    } catch (err) {
-                        console.error(&#039;SteamGifts Group Stats error:&#039;, err);
-                        btn.disabled = false;
-                        btn.innerHTML = `&lt;i class=&quot;fa fa-exclamation-triangle&quot;&gt;&lt;/i&gt; ${i18n.error}`;
-                    }
-                });
-
-                container.appendChild(btn);
-            });
-
-        } catch (e) {
-            console.error(&#039;SteamGifts Group Stats: failed to load giveaway groups:&#039;, e);
-        }
-    }
-
-    init();
-})();
-</textarea>
-            <button type="submit" class="btn">✨ Открыть предзаполненный Group Stats Checker на GreasyFork</button>
-        </form>
+        <div class="actions">
+            <button class="btn btn-copy" onclick="copyCode(this, 2)">📋 Скопировать код v1.7.0</button>
+            <a class="btn" href="https://greasyfork.org/ru/script_versions/new" target="_blank">🔗 Открыть форму GreasyFork</a>
+        </div>
     </div>
 
     <!-- Script 3 -->
     <div class="card">
         <div class="card-header">
             <div class="title">3. SteamGifts - Region Auto-Selector / Автовыбор регионов</div>
-            <div>
+            <div class="badges">
                 <span class="badge badge-ver">v1.5.0</span>
                 <span class="badge badge-lang">RU + EN</span>
             </div>
         </div>
         <div class="desc">Импорт региональных ограничений из SteamDB при создании раздачи с автоматическим обходом Cloudflare.</div>
-        <form action="https://greasyfork.org/ru/script_versions/prefill" method="POST" enctype="multipart/form-data" target="_blank">
-            <textarea name="script_version[code]">// ==UserScript==
-// @name         SteamGifts - Region Auto-Selector via SteamDB Tab
-// @name:ru      SteamGifts - Автовыбор регионов через SteamDB
-// @namespace    https://greasyfork.org/users/1522624-basimovif-ai
-// @version      1.5.0
-// @description  Bypasses Cloudflare by opening SteamDB in a temporary tab and auto-selects restricted countries when creating SteamGifts giveaways.
-// @description:ru Обходит Cloudflare открытием временной вкладки SteamDB и автоматически отмечает региональные ограничения при создании раздачи на SteamGifts.
-// @author       basimovif-ai
-// @license      MIT
-// @homepageURL  https://github.com/BasimovIF-AI/steamgifts-userscripts
-// @supportURL   https://github.com/BasimovIF-AI/steamgifts-userscripts/issues
-// @match        https://www.steamgifts.com/giveaways/new
-// @match        https://steamdb.info/sub/*
-// @grant        GM_setValue
-// @grant        GM_getValue
-// @grant        window.close
-// ==/UserScript==
-
-(function() {
-    &#039;use strict&#039;;
-
-    const isRu = (navigator.language || &#039;&#039;).toLowerCase().startsWith(&#039;ru&#039;);
-    const i18n = {
-        subIdLabel: &#039;SteamDB SubID:&#039;,
-        placeholder: isRu ? &#039;например, 828967&#039; : &#039;e.g. 828967&#039;,
-        applyBtn: isRu ? &#039;Применить&#039; : &#039;Apply&#039;,
-        enterValidSubId: isRu ? &#039;Введите корректный числовой SubID&#039; : &#039;Please enter a valid numeric SubID&#039;,
-        openingTab: isRu ? &#039;Открытие вкладки SteamDB...&#039; : &#039;Opening SteamDB tab...&#039;,
-        popupBlocked: isRu ? &#039;Браузер заблокировал открытие вкладки. Пожалуйста, разрешите всплывающие окна.&#039; : &#039;Browser blocked opening a new tab. Please allow popups for SteamGifts.&#039;,
-        timeout: isRu ? &#039;Время ожидания истекло. Если вкладка зависла на Cloudflare, пройдите проверку вручную.&#039; : &#039;Timeout waiting for SteamDB. If blocked by Cloudflare, solve captcha manually.&#039;,
-        noRestrictions: isRu ? &#039;Ограничений не найдено. Пакет доступен по всему миру.&#039; : &#039;No restrictions found. Package is available worldwide.&#039;,
-        partialWarning: (count, missingList) =&gt; isRu
-            ? `Частично импортировано (выбрано: ${count}). Внимание! Отсутствуют на SteamGifts: ${missingList}`
-            : `Partially imported (selected: ${count}). Warning! Missing on SteamGifts: ${missingList}`,
-        success: (count) =&gt; isRu
-            ? `Успешно импортировано! Выбрано стран: ${count}`
-            : `Successfully imported! Countries selected: ${count}`,
-    };
-
-    if (location.hostname === &#039;www.steamgifts.com&#039;) {
-        runSteamGifts();
-    } else if (location.hostname === &#039;steamdb.info&#039;) {
-        runSteamDB();
-    }
-
-    // --- ЛОГИКА ДЛЯ СТРАНИЦЫ STEAMGIFTS ---
-    function runSteamGifts() {
-        let regionRow = null;
-        const headingTextElements = document.querySelectorAll(&#039;.form__heading__text&#039;);
-
-        headingTextElements.forEach(el =&gt; {
-            if (el.textContent.trim() === &#039;Region Restricted&#039;) {
-                regionRow = el.closest(&#039;.form__row&#039;);
-            }
-        });
-
-        if (!regionRow) return;
-
-        const container = document.createElement(&#039;div&#039;);
-        container.id = &#039;sg-steamdb-addon-container&#039;;
-        container.style.display = &#039;none&#039;;
-        container.style.alignItems = &#039;center&#039;;
-        container.style.marginLeft = &#039;20px&#039;;
-        container.style.gap = &#039;8px&#039;;
-
-        container.innerHTML = `
-            &lt;span style=&quot;font-size: 12px; font-weight: normal; color: #555;&quot;&gt;${i18n.subIdLabel}&lt;/span&gt;
-            &lt;input type=&quot;text&quot; id=&quot;sg-subid-input&quot; placeholder=&quot;${i18n.placeholder}&quot; style=&quot;width: 100px; padding: 4px 6px; font-size: 12px; border: 1px solid #ccc; border-radius: 4px;&quot;&gt;
-            &lt;button type=&quot;button&quot; id=&quot;sg-subid-btn&quot; style=&quot;padding: 4px 10px; font-size: 12px; background: #4b729f; color: #fff; border: none; border-radius: 4px; cursor: pointer;&quot;&gt;${i18n.applyBtn}&lt;/button&gt;
-            &lt;span id=&quot;sg-subid-status&quot; style=&quot;font-size: 11px; color: #666; font-weight: bold;&quot;&gt;&lt;/span&gt;
-        `;
-
-        const heading = regionRow.querySelector(&#039;.form__heading&#039;);
-        if (heading) {
-            heading.appendChild(container);
-        }
-
-        const inputEl = document.getElementById(&#039;sg-subid-input&#039;);
-        const btnEl = document.getElementById(&#039;sg-subid-btn&#039;);
-        const statusEl = document.getElementById(&#039;sg-subid-status&#039;);
-
-        const yesCheckbox = regionRow.querySelector(&#039;div[data-checkbox-value=&quot;1&quot;]&#039;);
-        const noCheckbox = regionRow.querySelector(&#039;div[data-checkbox-value=&quot;0&quot;]&#039;);
-
-        function updateUiVisibility() {
-            if (yesCheckbox &amp;&amp; yesCheckbox.classList.contains(&#039;is-selected&#039;)) {
-                container.style.setProperty(&#039;display&#039;, &#039;inline-flex&#039;, &#039;important&#039;);
-            } else {
-                container.style.setProperty(&#039;display&#039;, &#039;none&#039;, &#039;important&#039;);
-            }
-        }
-
-        if (yesCheckbox) yesCheckbox.addEventListener(&#039;click&#039;, () =&gt; setTimeout(updateUiVisibility, 50));
-        if (noCheckbox) noCheckbox.addEventListener(&#039;click&#039;, () =&gt; setTimeout(updateUiVisibility, 50));
-
-        setTimeout(updateUiVisibility, 200);
-
-        function setStatus(text, color) {
-            statusEl.textContent = text;
-            statusEl.style.color = color || &#039;#666&#039;;
-        }
-
-        btnEl.addEventListener(&#039;click&#039;, () =&gt; {
-            const subId = inputEl.value.trim();
-            if (!subId || isNaN(subId)) {
-                setStatus(i18n.enterValidSubId, &#039;red&#039;);
-                return;
-            }
-
-            setStatus(i18n.openingTab, &#039;orange&#039;);
-
-            GM_setValue(&#039;parsed_sub_data&#039;, null);
-            GM_setValue(&#039;requested_sub&#039;, subId);
-
-            const steamDbUrl = `https://steamdb.info/sub/${subId}/?sg_sync=1`;
-            const newTab = window.open(steamDbUrl, &#039;_blank&#039;);
-
-            if (!newTab) {
-                setStatus(i18n.popupBlocked, &#039;red&#039;);
-                return;
-            }
-
-            let attempts = 0;
-            const maxAttempts = 60;
-            const interval = setInterval(() =&gt; {
-                attempts++;
-                const result = GM_getValue(&#039;parsed_sub_data&#039;);
-
-                if (result &amp;&amp; result.subId === subId) {
-                    clearInterval(interval);
-                    applyRestrictions(result);
-                } else if (attempts &gt;= maxAttempts) {
-                    clearInterval(interval);
-                    setStatus(i18n.timeout, &#039;red&#039;);
-                }
-            }, 500);
-        });
-
-        function applyRestrictions(data) {
-            if (data.type === &#039;none&#039;) {
-                setStatus(i18n.noRestrictions, &#039;green&#039;);
-                if (noCheckbox &amp;&amp; !noCheckbox.classList.contains(&#039;is-selected&#039;)) {
-                    noCheckbox.click();
-                    setTimeout(updateUiVisibility, 50);
-                }
-                return;
-            }
-
-            if (yesCheckbox &amp;&amp; !yesCheckbox.classList.contains(&#039;is-selected&#039;)) {
-                yesCheckbox.click();
-            }
-
-            const sgItems = regionRow.querySelectorAll(&#039;.form_list_item&#039;);
-            const allSgCodes = [];
-
-            sgItems.forEach(item =&gt; {
-                const dataName = item.getAttribute(&#039;data-name&#039;) || &#039;&#039;;
-                const code = dataName.split(&#039; &#039;).pop().toUpperCase();
-                if (code) {
-                    allSgCodes.push(code);
-                }
-            });
-
-            // Находим расхождения (страны из SteamDB, отсутствующие на SteamGifts)
-            const missingCountries = data.countries.filter(item =&gt; !allSgCodes.includes(item.code));
-
-            // Преобразуем данные в плоский массив кодов для выбора на странице
-            const dbCodes = data.countries.map(item =&gt; item.code);
-
-            let targetCodes = [];
-            if (data.type === &#039;only&#039;) {
-                targetCodes = dbCodes;
-            } else if (data.type === &#039;not&#039;) {
-                targetCodes = allSgCodes.filter(code =&gt; !dbCodes.includes(code));
-            }
-
-            // Изменяем чекбоксы
-            sgItems.forEach(item =&gt; {
-                const dataName = item.getAttribute(&#039;data-name&#039;) || &#039;&#039;;
-                const code = dataName.split(&#039; &#039;).pop().toUpperCase();
-                const isSelected = item.classList.contains(&#039;is-selected&#039;);
-                const shouldBeSelected = targetCodes.includes(code);
-
-                if (isSelected !== shouldBeSelected) {
-                    item.click();
-                }
-            });
-
-            // Считаем количество РЕАЛЬНО отмеченных галочек на странице
-            const actualSelectedCount = regionRow.querySelectorAll(&#039;.form_list_item.is-selected&#039;).length;
-
-            if (missingCountries.length &gt; 0) {
-                const missingTextList = missingCountries.map(item =&gt; `${item.name} (${item.code})`).join(&#039;, &#039;);
-                setStatus(i18n.partialWarning(actualSelectedCount, missingTextList), &#039;#d97706&#039;);
-            } else {
-                setStatus(i18n.success(actualSelectedCount), &#039;green&#039;);
-            }
-        }
-    }
-
-    // --- ЛОГИКА ДЛЯ ВРЕМЕННОЙ ВКЛАДКИ STEAMDB ---
-    function runSteamDB() {
-        if (!location.search.includes(&#039;sg_sync=1&#039;)) {
-            return;
-        }
-
-        const match = location.pathname.match(/\/sub\/(\d+)/);
-        if (!match) return;
-        const subId = match[1];
-
-        const requestedSub = GM_getValue(&#039;requested_sub&#039;);
-        if (requestedSub !== subId) return;
-
-        const isPageLoaded = document.getElementById(&#039;info&#039;) || document.querySelector(&#039;.pageheader&#039;);
-        if (!isPageLoaded) return;
-
-        const restrictionPanel = document.querySelector(&#039;.panel-error&#039;);
-        let type = &#039;none&#039;;
-        const countries = []; // Содержит объекты вида { code: &#039;FR&#039;, name: &#039;France&#039; }
-
-        if (restrictionPanel) {
-            const headingSpan = restrictionPanel.querySelector(&#039;.panel-heading span&#039;);
-            if (headingSpan) {
-                const text = headingSpan.textContent.trim();
-                if (text.includes(&#039;can only be activated&#039;)) {
-                    type = &#039;only&#039;;
-                } else if (text.includes(&#039;can NOT be activated&#039;)) {
-                    type = &#039;not&#039;;
-                }
-            }
-
-            // Парсим список стран (коды + текстовые названия)
-            const listItems = restrictionPanel.querySelectorAll(&#039;.country-list-grid li&#039;);
-            listItems.forEach(li =&gt; {
-                const img = li.querySelector(&#039;img&#039;);
-                if (!img) return;
-
-                const src = img.getAttribute(&#039;src&#039;) || &#039;&#039;;
-                const m = src.match(/\/country\/([a-z0-9]+)\.svg/i);
-                if (m) {
-                    const code = m[1].toUpperCase();
-                    const span = li.querySelector(&#039;span&#039;);
-                    let name = span ? span.textContent : li.textContent;
-                    name = name.replace(/\s+/g, &#039; &#039;).trim();
-
-                    countries.push({
-                        code: code,
-                        name: name
-                    });
-                }
-            });
-        }
-
-        GM_setValue(&#039;parsed_sub_data&#039;, {
-            subId: subId,
-            type: type,
-            countries: countries,
-            timestamp: Date.now()
-        });
-
-        window.close();
-    }
-})();
-</textarea>
-            <button type="submit" class="btn">✨ Открыть предзаполненный Region Auto-Selector на GreasyFork</button>
-        </form>
+        <div class="actions">
+            <button class="btn btn-copy" onclick="copyCode(this, 3)">📋 Скопировать код v1.5.0</button>
+            <a class="btn" href="https://greasyfork.org/ru/script_versions/new" target="_blank">🔗 Открыть форму GreasyFork</a>
+        </div>
     </div>
 
     <!-- Script 4 -->
     <div class="card">
         <div class="card-header">
             <div class="title">4. SteamGifts - Unlucky-7 Winner Stats & Copy (#580030)</div>
-            <div>
+            <div class="badges">
                 <span class="badge badge-ver">v1.4.1 (Обновление)</span>
                 <span class="badge badge-lang">RU + EN</span>
             </div>
         </div>
-        <div class="desc">Добавляет русский язык в метаданные вашего существующего скрипта #580030, чтобы он отображался в русской выдаче сайта!</div>
-        <form action="https://greasyfork.org/ru/scripts/580030/versions/prefill" method="POST" enctype="multipart/form-data" target="_blank">
-            <textarea name="script_version[code]">// ==UserScript==
-// @name         SteamGifts - Unlucky-7 Winner Stats &amp; Copy
-// @name:ru      SteamGifts - Статистика победителей Unlucky-7 и копирование
-// @namespace    https://greasyfork.org/users/1522624-basimovif-ai
-// @version      1.4.1
-// @description  Displays interactive winner stats for the Unlucky-7 group on giveaway pages and allows copying formatted data to the clipboard.
-// @description:ru Отображает интерактивную статистику победителей группы Unlucky-7 на страницах раздач и позволяет копировать отформатированные данные в буфер обмена.
-// @author       basimovif-ai
-// @license      MIT
-// @homepageURL  https://github.com/BasimovIF-AI/steamgifts-userscripts
-// @supportURL   https://github.com/BasimovIF-AI/steamgifts-userscripts/issues
-// @match        https://www.steamgifts.com/giveaway/*/winners
-// @grant        none
-// ==/UserScript==
-
-(function() {
-    &#039;use strict&#039;;
-
-    const isRu = (navigator.language || &#039;&#039;).toLowerCase().startsWith(&#039;ru&#039;);
-    const i18n = {
-        formulaTitle: isRu ? &#039;Нажмите для полной формулы расчета&#039; : &#039;Click to toggle calculation formula&#039;,
-        copyTitle: isRu ? &#039;Скопировать информацию о победителе&#039; : &#039;Copy winner info to clipboard&#039;,
-        errorLog: isRu ? &#039;Ошибка при сборе данных для пользователя &#039; : &#039;Error fetching data for user &#039;,
-    };
-
-    // 1. Проверяем наличие группы &quot;Unlucky-7&quot; на странице раздачи
-    const groupLink = Array.from(document.querySelectorAll(&#039;a.featured__column--group&#039;))
-        .find(el =&gt; el.getAttribute(&#039;title&#039;) === &#039;Unlucky-7&#039; || el.textContent.trim() === &#039;Unlucky-7&#039;);
-
-    if (!groupLink) {
-        return; // Если группа не найдена, завершаем работу
-    }
-
-    const groupSearchBaseUrl = &#039;https://www.steamgifts.com/group/WWF2y/unlucky-7/users/search?q=&#039;;
-    const gaUrl = window.location.origin + window.location.pathname.replace(/\/winners$/, &#039;&#039;);
-
-    // Вспомогательная функция для получения порядкового суффикса числительных (1st, 2nd, 3rd, 4th...)
-    const getOrdinalSuffix = (num) =&gt; {
-        const j = num % 10, k = num % 100;
-        if (j === 1 &amp;&amp; k !== 11) return num + &quot;st&quot;;
-        if (j === 2 &amp;&amp; k !== 12) return num + &quot;nd&quot;;
-        if (j === 3 &amp;&amp; k !== 13) return num + &quot;rd&quot;;
-        return num + &quot;th&quot;;
-    };
-
-    // Вспомогательные функции парсинга
-    const parseSentRec = (text) =&gt; {
-        const cleaned = text.replace(/,/g, &#039;&#039;);
-        const m = cleaned.match(/([\d.]+)\s*\(\$([\d.]+)\)/);
-        return m ? [parseFloat(m[1]), parseFloat(m[2])] : [0, 0];
-    };
-
-    const parseDiff = (text) =&gt; {
-        return parseFloat(text.replace(/[^0-9.-]/g, &#039;&#039;));
-    };
-
-    // 2. Находим всех победителей в таблице
-    const winnerRows = document.querySelectorAll(&#039;.table__rows .table__row-outer-wrap&#039;);
-
-    winnerRows.forEach(row =&gt; {
-        const userLink = row.querySelector(&#039;.table__column__heading a&#039;);
-        if (!userLink) return;
-
-        const username = userLink.textContent.trim();
-        const parentNode = userLink.parentNode;
-
-        // Создаем индикатор загрузки
-        const loader = document.createElement(&#039;i&#039;);
-        loader.className = &#039;fa fa-refresh fa-spin&#039;;
-        loader.style.marginLeft = &#039;8px&#039;;
-        loader.style.color = &#039;#7f8c8d&#039;;
-        loader.style.fontSize = &#039;12px&#039;;
-        parentNode.appendChild(loader);
-
-        const groupSearchUrl = groupSearchBaseUrl + encodeURIComponent(username);
-        const profileUrl = `https://www.steamgifts.com/user/${username}`;
-
-        // Выполняем запросы к группе и к профилю параллельно
-        Promise.all([
-            fetch(groupSearchUrl).then(r =&gt; r.text()),
-            fetch(profileUrl).then(r =&gt; r.text())
-        ])
-        .then(([groupHtml, profileHtml]) =&gt; {
-            loader.remove();
-
-            const parser = new DOMParser();
-
-            // --- Парсинг данных из группы ---
-            const groupDoc = parser.parseFromString(groupHtml, &#039;text/html&#039;);
-            const memberRows = groupDoc.querySelectorAll(&#039;.table__rows .table__row-outer-wrap&#039;);
-            let userData = null;
-
-            for (const memberRow of memberRows) {
-                const nameEl = memberRow.querySelector(&#039;.table__column__heading&#039;);
-                if (nameEl &amp;&amp; nameEl.textContent.trim().toLowerCase() === username.toLowerCase()) {
-                    const cols = memberRow.querySelectorAll(&#039;.table__column--width-small.text-center&#039;);
-                    if (cols.length &gt;= 4) {
-                        userData = {
-                            sentText: cols[0].textContent.trim(),
-                            recText: cols[1].textContent.trim(),
-                            siteGiftDiffStr: cols[2].textContent.trim(),
-                            siteValueDiffStr: cols[3].textContent.trim()
-                        };
-                        break;
-                    }
-                }
-            }
-
-            if (!userData) return;
-
-            // --- Парсинг &quot;Gifts Won&quot; из профиля ---
-            const profileDoc = parser.parseFromString(profileHtml, &#039;text/html&#039;);
-            const profileRows = profileDoc.querySelectorAll(&#039;.featured__table__row&#039;);
-            let giftsWon = 0;
-
-            for (const pRow of profileRows) {
-                const left = pRow.querySelector(&#039;.featured__table__row__left&#039;);
-                if (left &amp;&amp; left.textContent.trim() === &#039;Gifts Won&#039;) {
-                    const right = pRow.querySelector(&#039;.featured__table__row__right a&#039;);
-                    if (right) {
-                        giftsWon = parseInt(right.textContent.replace(/,/g, &#039;&#039;), 10);
-                    }
-                    break;
-                }
-            }
-
-            // Вычисления и независимая валидация для каждой разницы
-            const [sentCount, sentValue] = parseSentRec(userData.sentText);
-            const [recCount, recValue] = parseSentRec(userData.recText);
-            const siteGiftDiff = parseDiff(userData.siteGiftDiffStr);
-            const siteValueDiff = parseDiff(userData.siteValueDiffStr);
-
-            const calculatedGiftDiff = sentCount - recCount;
-            const calculatedValueDiff = sentValue - recValue;
-
-            const isGiftMatch = Math.abs(calculatedGiftDiff - siteGiftDiff) &lt; 0.05;
-            const isValueMatch = Math.abs(calculatedValueDiff - siteValueDiff) &lt; 0.05;
-
-            const giftColor = isGiftMatch ? &#039;#2e7d32&#039; : &#039;#c62828&#039;;
-            const valueColor = isValueMatch ? &#039;#2e7d32&#039; : &#039;#c62828&#039;;
-
-            // Отрисовка интерактивного элемента статистики
-            const statsContainer = document.createElement(&#039;span&#039;);
-            statsContainer.style.cursor = &#039;pointer&#039;;
-            statsContainer.style.marginLeft = &#039;8px&#039;;
-            statsContainer.style.fontSize = &#039;12px&#039;;
-            statsContainer.style.fontWeight = &#039;bold&#039;;
-            statsContainer.style.userSelect = &#039;none&#039;;
-            statsContainer.style.color = &#039;#7f8c8d&#039;;
-            statsContainer.style.transition = &#039;opacity 0.15s ease&#039;;
-            statsContainer.title = i18n.formulaTitle;
-
-            // Генерация DOM структуры в зависимости от состояния свертки
-            const renderStats = (expanded) =&gt; {
-                statsContainer.innerHTML = &#039;&#039;;
-
-                // Открывающая скобка
-                const openBracket = document.createElement(&#039;span&#039;);
-                openBracket.textContent = &#039;(&#039;;
-                statsContainer.appendChild(openBracket);
-
-                // Блок разницы подарков
-                if (expanded) {
-                    const formula = document.createElement(&#039;span&#039;);
-                    formula.textContent = `${sentCount}-${recCount}=`;
-                    statsContainer.appendChild(formula);
-                }
-                const giftResult = document.createElement(&#039;span&#039;);
-                giftResult.textContent = userData.siteGiftDiffStr;
-                giftResult.style.color = giftColor;
-                statsContainer.appendChild(giftResult);
-
-                // Разделитель
-                const separator = document.createElement(&#039;span&#039;);
-                separator.textContent = &#039;; &#039;;
-                statsContainer.appendChild(separator);
-
-                // Блок разницы стоимости
-                if (expanded) {
-                    const formula = document.createElement(&#039;span&#039;);
-                    formula.textContent = `$${sentValue}-$${recValue}=`;
-                    statsContainer.appendChild(formula);
-                }
-                const valueResult = document.createElement(&#039;span&#039;);
-                valueResult.textContent = userData.siteValueDiffStr;
-                valueResult.style.color = valueColor;
-                statsContainer.appendChild(valueResult);
-
-                // Закрывающая скобка
-                const closeBracket = document.createElement(&#039;span&#039;);
-                closeBracket.textContent = &#039;)&#039;;
-                statsContainer.appendChild(closeBracket);
-
-                // Количество побед в развернутом режиме
-                if (expanded) {
-                    const winsSpan = document.createElement(&#039;span&#039;);
-                    winsSpan.textContent = ` ${giftsWon}`;
-                    statsContainer.appendChild(winsSpan);
-                }
-            };
-
-            let isExpanded = false;
-            renderStats(isExpanded);
-
-            statsContainer.addEventListener(&#039;mouseenter&#039;, () =&gt; { statsContainer.style.opacity = &#039;0.7&#039;; });
-            statsContainer.addEventListener(&#039;mouseleave&#039;, () =&gt; { statsContainer.style.opacity = &#039;1&#039;; });
-
-            statsContainer.addEventListener(&#039;click&#039;, (e) =&gt; {
-                e.preventDefault();
-                isExpanded = !isExpanded;
-                renderStats(isExpanded);
-            });
-
-            parentNode.appendChild(statsContainer);
-
-            // --- Создание кнопки копирования ---
-            const badgeText = (giftsWon &lt;= 8)
-                ? `${getOrdinalSuffix(giftsWon)} win`
-                : `Gifter, ${userData.siteGiftDiffStr}`;
-
-            const clipboardText = `GA: ${gaUrl}\nWinner: ${profileUrl} (${badgeText})`;
-
-            const copyBtn = document.createElement(&#039;i&#039;);
-            copyBtn.className = &#039;fa fa-clipboard&#039;;
-            copyBtn.style.marginLeft = &#039;8px&#039;;
-            copyBtn.style.cursor = &#039;pointer&#039;;
-            copyBtn.style.color = &#039;#7f8c8d&#039;;
-            copyBtn.style.fontSize = &#039;12px&#039;;
-            copyBtn.style.transition = &#039;color 0.15s ease&#039;;
-            copyBtn.title = i18n.copyTitle;
-
-            copyBtn.addEventListener(&#039;mouseenter&#039;, () =&gt; { copyBtn.style.color = &#039;#333&#039;; });
-            copyBtn.addEventListener(&#039;mouseleave&#039;, () =&gt; { copyBtn.style.color = &#039;#7f8c8d&#039;; });
-
-            copyBtn.addEventListener(&#039;click&#039;, (e) =&gt; {
-                e.preventDefault();
-                navigator.clipboard.writeText(clipboardText).then(() =&gt; {
-                    copyBtn.className = &#039;fa fa-check&#039;;
-                    copyBtn.style.color = &#039;#2e7d32&#039;;
-                    setTimeout(() =&gt; {
-                        copyBtn.className = &#039;fa fa-clipboard&#039;;
-                        copyBtn.style.color = &#039;#7f8c8d&#039;;
-                    }, 1500);
-                }).catch(err =&gt; {
-                    console.error(&#039;SteamGifts Unlucky-7: clipboard error:&#039;, err);
-                });
-            });
-
-            parentNode.appendChild(copyBtn);
-        })
-        .catch(err =&gt; {
-            loader.remove();
-            console.error(i18n.errorLog + username, err);
-        });
-    });
-})();
-</textarea>
-            <button type="submit" class="btn btn-update">🔄 Обновить Unlucky-7 на GreasyFork (до v1.4.1)</button>
-        </form>
+        <div class="desc">Обновление до v1.4.1: добавляет русский язык (@name:ru, @description:ru), чтобы ваш скрипт появился в русском каталоге SteamGifts!</div>
+        <div class="actions">
+            <button class="btn btn-copy btn-update" onclick="copyCode(this, 4)">📋 Скопировать код v1.4.1</button>
+            <a class="btn btn-update" href="https://greasyfork.org/ru/scripts/580030-steamgifts-unlucky-7-winner-stats-copy/versions/new" target="_blank">🔄 Открыть обновление #580030 на GreasyFork</a>
+        </div>
     </div>
 </div>
+
+<script>
+const scripts = {
+    1: "// ==UserScript==\n// @name         SteamGifts - Chance Per Point (‱)\n// @name:ru      SteamGifts - Шанс на очко (‱)\n// @namespace    https://greasyfork.org/users/1522624-basimovif-ai\n// @version      7.0.0\n// @description  Adds a win chance per point column in basis points (‱) and enables hiding giveaways above a chosen threshold on SteamGifts entered page.\n// @description:ru Добавляет столбец с шансом на победу на одно очко в базисных пунктах (‱) и позволяет скрывать раздачи с шансом выше заданного значения.\n// @author       basimovif-ai\n// @license      MIT\n// @homepageURL  https://github.com/BasimovIF-AI/steamgifts-userscripts\n// @supportURL   https://github.com/BasimovIF-AI/steamgifts-userscripts/issues\n// @match        https://www.steamgifts.com/giveaways/entered*\n// @grant        GM_addStyle\n// @run-at       document-end\n// ==/UserScript==\n\n(function() {\n    'use strict';\n\n    const isRu = (navigator.language || '').toLowerCase().startsWith('ru');\n    const i18n = {\n        filterLabel: isRu ? 'Фильтр по шансу: скрыть всё, что выше' : 'Win Chance Filter: hide entries above',\n        filterBtn: isRu ? 'Фильтровать' : 'Filter',\n        resetBtn: isRu ? 'Сбросить' : 'Reset',\n        colHeader: isRu ? 'Шанс/Очко (‱)' : 'Chance/Pt (‱)',\n        colHeaderTitle: isRu\n            ? 'Шанс на победу за одно очко ((Копии / (Участники * Очки)) * 10000‱)'\n            : 'Win chance per single point ((Copies / (Entries * Points)) * 10000‱)',\n        errorText: isRu ? 'Ошибка' : 'Error',\n    };\n\n    // Стили для панели управления\n    GM_addStyle(`\n        .sg-chance-filter-panel {\n            background-color: #f0f2f5;\n            padding: 10px;\n            margin-bottom: 15px;\n            border-radius: 5px;\n            display: flex;\n            align-items: center;\n            gap: 10px;\n        }\n        .sg-chance-filter-panel input {\n            border: 1px solid #ccc;\n            padding: 5px;\n            border-radius: 3px;\n            width: 80px;\n        }\n        .sg-chance-filter-panel button {\n            background-color: #4CAF50;\n            color: white;\n            border: none;\n            padding: 6px 12px;\n            text-align: center;\n            text-decoration: none;\n            display: inline-block;\n            font-size: 14px;\n            cursor: pointer;\n            border-radius: 3px;\n        }\n        .sg-chance-filter-panel button.reset {\n            background-color: #f44336;\n        }\n    `);\n\n    // --- ФУНКЦИИ ФИЛЬТРАЦИИ ---\n\n    function applyFilter() {\n        const filterValueInput = document.getElementById('chance-filter-input');\n        if (!filterValueInput) return;\n\n        // Получаем значение (максимальный порог) и конвертируем его из ‱ в чистое число\n        const maxPerMyriad = parseFloat(filterValueInput.value);\n        if (isNaN(maxPerMyriad)) {\n            resetFilter();\n            return;\n        }\n        const maxChance = maxPerMyriad / 10000.0; // Делим на 10000\n\n        const allRows = document.querySelectorAll('.table__row-outer-wrap');\n        allRows.forEach(rowWrapper => {\n            const innerRow = rowWrapper.querySelector('.table__row-inner-wrap');\n            const rowChance = parseFloat(innerRow.dataset.chancePerPoint);\n\n            if (!isNaN(rowChance) && rowChance > maxChance) {\n                rowWrapper.style.display = 'none';\n            } else {\n                rowWrapper.style.display = '';\n            }\n        });\n    }\n\n    function resetFilter() {\n        const filterValueInput = document.getElementById('chance-filter-input');\n        if (filterValueInput) filterValueInput.value = '';\n\n        const allRows = document.querySelectorAll('.table__row-outer-wrap');\n        allRows.forEach(rowWrapper => {\n            rowWrapper.style.display = '';\n        });\n    }\n\n    // --- ОСНОВНАЯ ЛОГИКА ---\n    function createFilterPanel() {\n        if (document.getElementById('chance-filter-panel')) return;\n\n        const container = document.querySelector('.table');\n        if (!container) return;\n\n        const panel = document.createElement('div');\n        panel.id = 'chance-filter-panel';\n        panel.className = 'sg-chance-filter-panel';\n        panel.innerHTML = `\n            <label for=\"chance-filter-input\"><b>${i18n.filterLabel}</b></label>\n            <input type=\"number\" id=\"chance-filter-input\" placeholder=\"1.00\" step=\"0.01\">\n            <span>‱</span>\n            <button id=\"apply-chance-filter\">${i18n.filterBtn}</button>\n            <button id=\"reset-chance-filter\" class=\"reset\">${i18n.resetBtn}</button>\n        `;\n\n        container.parentNode.insertBefore(panel, container);\n\n        document.getElementById('apply-chance-filter').addEventListener('click', applyFilter);\n        document.getElementById('reset-chance-filter').addEventListener('click', resetFilter);\n    }\n\n    function processGiveaways() {\n        const header = document.querySelector('.table__heading');\n        const giveaways = document.querySelectorAll('.table__row-inner-wrap:not(.chance-processed)');\n\n        if (!header || giveaways.length === 0) {\n            return;\n        }\n\n        if (!header.querySelector('.chance-per-point-header')) {\n            const newHeaderCell = document.createElement('div');\n            newHeaderCell.className = 'table__column--width-small text-center chance-per-point-header';\n            newHeaderCell.textContent = i18n.colHeader;\n            newHeaderCell.title = i18n.colHeaderTitle;\n            header.appendChild(newHeaderCell);\n\n            const allRowsForGrid = document.querySelectorAll('.table__heading, .table__row-inner-wrap');\n            allRowsForGrid.forEach(row => {\n                if(!row.style.gridTemplateColumns.endsWith('110px')) {\n                    const currentGridStyle = window.getComputedStyle(row).gridTemplateColumns;\n                    row.style.gridTemplateColumns = currentGridStyle + ' 110px';\n                }\n            });\n        }\n\n        giveaways.forEach(row => {\n            try {\n                const titleElement = row.querySelector('a.table__column__heading');\n                if (!titleElement) {\n                    row.classList.add('chance-processed');\n                    return;\n                }\n                const titleText = titleElement.textContent;\n\n                const pointsMatch = titleText.match(/\\((\\d+)P\\)/);\n                const points = pointsMatch ? parseInt(pointsMatch[1], 10) : NaN;\n\n                const copiesMatch = titleText.match(/\\((\\d+)\\sCopies\\)/);\n                const copies = copiesMatch ? parseInt(copiesMatch[1], 10) : 1;\n\n                let entries = NaN;\n                const columns = row.querySelectorAll('.table__row-inner-wrap > div.table__column--width-small');\n                for (const col of columns) {\n                    if (/^[\\d,]+$/.test(col.textContent.trim())) {\n                         entries = parseInt(col.textContent.trim().replace(/,/g, ''), 10);\n                         break;\n                    }\n                }\n\n                let chanceText = 'N/A';\n                let rawChance = 0;\n\n                if (!isNaN(entries) && entries > 0 && !isNaN(points) && points > 0 && copies > 0) {\n                    const chance = copies / (entries * points);\n                    rawChance = chance;\n                    chanceText = (chance * 10000).toFixed(2) + '‱';\n                }\n\n                row.dataset.chancePerPoint = rawChance;\n\n                const newCell = document.createElement('div');\n                newCell.className = 'table__column--width-small text-center';\n                newCell.textContent = chanceText;\n                row.appendChild(newCell);\n\n            } catch (e) {\n                console.error('SteamGifts Chance Per Point: error processing row:', row, e);\n                row.dataset.chancePerPoint = 0;\n                const errorCell = document.createElement('div');\n                errorCell.className = 'table__column--width-small text-center';\n                errorCell.textContent = i18n.errorText;\n                row.appendChild(errorCell);\n            } finally {\n                row.classList.add('chance-processed');\n            }\n        });\n    }\n\n    // --- ИНИЦИАЛИЗАЦИЯ И НАБЛЮДЕНИЕ ЗА ИЗМЕНЕНИЯМИ ---\n    const observer = new MutationObserver((mutationsList) => {\n        for(const mutation of mutationsList) {\n            if (mutation.addedNodes.length > 0) {\n                 const hasNewRows = Array.from(mutation.addedNodes).some(node => node.nodeType === 1 && node.classList.contains('table__row-outer-wrap'));\n                 if(hasNewRows){\n                    setTimeout(() => {\n                        processGiveaways();\n                        if (document.getElementById('chance-filter-input').value) {\n                            applyFilter();\n                        }\n                    }, 200);\n                    return;\n                }\n            }\n        }\n    });\n\n    const targetNode = document.querySelector('.table');\n    if (targetNode) {\n        observer.observe(targetNode, { childList: true, subtree: true });\n    }\n\n    setTimeout(() => {\n        createFilterPanel();\n        processGiveaways();\n    }, 500);\n\n})();\n",
+    2: "// ==UserScript==\n// @name         SteamGifts - Group Stats Checker (Universal)\n// @name:ru      SteamGifts - Проверка статистики в группах (Универсальный)\n// @namespace    https://greasyfork.org/users/1522624-basimovif-ai\n// @version      1.7.0\n// @description  Displays interactive group stat buttons on giveaway pages and autofills thank-you comments for giveaway creator.\n// @description:ru Отображает кнопки статистики групп на страницах раздач и автоматически заполняет благодарность создателю раздачи.\n// @author       basimovif-ai\n// @license      MIT\n// @homepageURL  https://github.com/BasimovIF-AI/steamgifts-userscripts\n// @supportURL   https://github.com/BasimovIF-AI/steamgifts-userscripts/issues\n// @match        https://www.steamgifts.com/giveaway/*\n// @grant        none\n// ==/UserScript==\n\n(function() {\n    'use strict';\n\n    const isRu = (navigator.language || '').toLowerCase().startsWith('ru');\n    const i18n = {\n        btnTitle: (groupName) => isRu ? `Проверить мою статистику в группе: ${groupName}` : `Check my stats in group: ${groupName}`,\n        formulaTitle: isRu ? 'Нажмите для формулы расчета' : 'Click to toggle calculation formula',\n        notFound: isRu ? '(не найден)' : '(not found)',\n        error: isRu ? 'Ошибка' : 'Error',\n        networkError: isRu ? 'Ошибка сети при запросе к группе' : 'Network error fetching group stats',\n    };\n\n    // Проверяем, что находимся на главной странице раздачи (исключаем подразделы)\n    const pathParts = window.location.pathname.split('/').filter(Boolean);\n    if (pathParts.length !== 2 && !(pathParts.length === 3 && pathParts[0] === 'giveaway')) {\n        // Поддерживает и /giveaway/:id/:slug, и стандартный формат\n        if (pathParts[0] !== 'giveaway') return;\n        if (pathParts.length > 3) return; // Исключаем /winners, /entries и т.д.\n    }\n\n    const origin = window.location.origin;\n\n    // Вспомогательные функции парсинга\n    const parseSentRec = (text) => {\n        const cleaned = text.replace(/,/g, '');\n        const m = cleaned.match(/([\\d.]+)\\s*\\(\\$([\\d.]+)\\)/);\n        return m ? [parseFloat(m[1]), parseFloat(m[2])] : [0, 0];\n    };\n\n    const parseDiff = (text) => {\n        return parseFloat(text.replace(/[^0-9.-]/g, ''));\n    };\n\n    // Кэш для общего количества побед текущего пользователя\n    let cachedGiftsWon = null;\n\n    async function fetchGiftsWon(username) {\n        if (cachedGiftsWon !== null) return cachedGiftsWon;\n        try {\n            const r = await fetch(`${origin}/user/${username}`);\n            if (!r.ok) return 0;\n            const html = await r.text();\n            const parser = new DOMParser();\n            const doc = parser.parseFromString(html, 'text/html');\n            const profileRows = doc.querySelectorAll('.featured__table__row');\n            for (const pRow of profileRows) {\n                const left = pRow.querySelector('.featured__table__row__left');\n                if (left && left.textContent.trim() === 'Gifts Won') {\n                    const right = pRow.querySelector('.featured__table__row__right a');\n                    if (right) {\n                        cachedGiftsWon = parseInt(right.textContent.replace(/,/g, ''), 10);\n                        return cachedGiftsWon;\n                    }\n                }\n            }\n        } catch (e) {\n            console.error('SteamGifts Group Stats: error fetching Gifts Won:', e);\n        }\n        return 0;\n    }\n\n    // Запрос статистики пользователя внутри конкретной группы\n    async function fetchGroupStats(groupPath, username) {\n        const groupSearchUrl = `${origin}${groupPath}/users/search?q=${encodeURIComponent(username)}`;\n        const r = await fetch(groupSearchUrl);\n        if (!r.ok) throw new Error(i18n.networkError);\n        const html = await r.text();\n        const parser = new DOMParser();\n        const doc = parser.parseFromString(html, 'text/html');\n        const memberRows = doc.querySelectorAll('.table__rows .table__row-outer-wrap');\n\n        for (const memberRow of memberRows) {\n            const nameEl = memberRow.querySelector('.table__column__heading');\n            if (nameEl && nameEl.textContent.trim().toLowerCase() === username.toLowerCase()) {\n                const cols = memberRow.querySelectorAll('.table__column--width-small.text-center');\n                if (cols.length >= 4) {\n                    return {\n                        sentText: cols[0].textContent.trim(),\n                        recText: cols[1].textContent.trim(),\n                        siteGiftDiffStr: cols[2].textContent.trim(),\n                        siteValueDiffStr: cols[3].textContent.trim()\n                    };\n                }\n            }\n        }\n        return null; // Пользователь не найден в группе\n    }\n\n    async function init() {\n        // 1. Поиск имени текущего пользователя на странице\n        const avatarEl = document.querySelector('a.nav__avatar-outer-wrap[href^=\"/user/\"]');\n        if (!avatarEl) return;\n        const username = avatarEl.getAttribute('href').replace('/user/', '');\n\n        // 2. Поиск создателя раздачи\n        const creatorLink = document.querySelector('.featured__columns a[href^=\"/user/\"]:not(.featured_giveaway_image_avatar)');\n        const creatorName = creatorLink ? creatorLink.textContent.trim() : null;\n\n        // 3. Автозаполнение комментария, если поле присутствует и оно пустое\n        if (creatorName) {\n            const commentTextarea = document.querySelector('textarea[name=\"description\"]');\n            if (commentTextarea && commentTextarea.value.trim() === \"\") {\n                commentTextarea.value = `Thanks a lot ${creatorName}!`;\n            }\n        }\n\n        // 4. Поиск ссылки на страницу со списком групп раздачи\n        const groupLinkEl = document.querySelector('a.featured__column--group');\n        if (!groupLinkEl) return;\n\n        const groupsPageUrl = origin + groupLinkEl.getAttribute('href');\n\n        // Создаем контейнер для кнопок рядом с индикатором групп\n        const container = document.createElement('span');\n        container.className = 'sg-group-stats-wrapper';\n        container.style.marginLeft = '10px';\n        container.style.display = 'inline-flex';\n        container.style.gap = '6px';\n        container.style.alignItems = 'center';\n        groupLinkEl.parentNode.insertBefore(container, groupLinkEl.nextSibling);\n\n        try {\n            // Загружаем вспомогательную страницу со списком групп раздачи\n            const r = await fetch(groupsPageUrl);\n            if (!r.ok) return;\n            const html = await r.text();\n            const parser = new DOMParser();\n            const doc = parser.parseFromString(html, 'text/html');\n\n            // Находим все текстовые ссылки на группы (они ведут на /group/...)\n            const groupLinks = doc.querySelectorAll('.table__rows a.table__column__heading[href^=\"/group/\"]');\n\n            const groups = [];\n            groupLinks.forEach(el => {\n                const href = el.getAttribute('href');\n                const name = el.textContent.trim();\n                if (href && name) {\n                    groups.push({ name, path: href });\n                }\n            });\n\n            // Для каждой обнаруженной группы создаем интерактивную кнопку\n            groups.forEach(group => {\n                const btn = document.createElement('button');\n                btn.style.background = '#4b5668';\n                btn.style.color = '#d2d6da';\n                btn.style.border = 'none';\n                btn.style.padding = '2px 6px';\n                btn.style.borderRadius = '3px';\n                btn.style.fontSize = '11px';\n                btn.style.cursor = 'pointer';\n                btn.style.display = 'inline-flex';\n                btn.style.alignItems = 'center';\n                btn.style.gap = '4px';\n                btn.style.fontFamily = 'inherit';\n                btn.style.transition = 'background 0.2s';\n                btn.title = i18n.btnTitle(group.name);\n                btn.innerHTML = `<i class=\"fa fa-bar-chart\"></i> ${group.name}`;\n\n                btn.addEventListener('mouseenter', () => btn.style.background = '#5a687c');\n                btn.addEventListener('mouseleave', () => btn.style.background = '#4b5668');\n\n                btn.addEventListener('click', async (e) => {\n                    e.preventDefault();\n                    btn.disabled = true;\n                    btn.innerHTML = `<i class=\"fa fa-refresh fa-spin\"></i> ${group.name}`;\n\n                    try {\n                        const [userData, giftsWon] = await Promise.all([\n                            fetchGroupStats(group.path, username),\n                            fetchGiftsWon(username)\n                        ]);\n\n                        const resultContainer = document.createElement('span');\n                        resultContainer.style.fontSize = '12px';\n                        resultContainer.style.display = 'inline-flex';\n                        resultContainer.style.alignItems = 'center';\n                        resultContainer.style.gap = '4px';\n\n                        const label = document.createElement('span');\n                        label.textContent = `${group.name}:`;\n                        label.style.fontWeight = 'bold';\n                        label.style.color = '#7f8c8d';\n                        resultContainer.appendChild(label);\n\n                        if (userData) {\n                            // Расчет и отрисовка интерактивной статистики\n                            const [sentCount, sentValue] = parseSentRec(userData.sentText);\n                            const [recCount, recValue] = parseSentRec(userData.recText);\n                            const siteGiftDiff = parseDiff(userData.siteGiftDiffStr);\n                            const siteValueDiff = parseDiff(userData.siteValueDiffStr);\n\n                            const calculatedGiftDiff = sentCount - recCount;\n                            const calculatedValueDiff = sentValue - recValue;\n\n                            const isGiftMatch = Math.abs(calculatedGiftDiff - siteGiftDiff) < 0.05;\n                            const isValueMatch = Math.abs(calculatedValueDiff - siteValueDiff) < 0.05;\n\n                            const giftColor = isGiftMatch ? '#2e7d32' : '#c62828';\n                            const valueColor = isValueMatch ? '#2e7d32' : '#c62828';\n\n                            const statsSpan = document.createElement('span');\n                            statsSpan.style.cursor = 'pointer';\n                            statsSpan.style.fontWeight = 'bold';\n                            statsSpan.style.userSelect = 'none';\n                            statsSpan.style.color = '#7f8c8d';\n                            statsSpan.style.transition = 'opacity 0.15s ease';\n                            statsSpan.title = i18n.formulaTitle;\n\n                            const renderStats = (expanded) => {\n                                statsSpan.innerHTML = '';\n                                statsSpan.appendChild(document.createTextNode('('));\n\n                                if (expanded) {\n                                    const formula = document.createElement('span');\n                                    formula.textContent = `${sentCount}-${recCount}=`;\n                                    statsSpan.appendChild(formula);\n                                }\n                                const giftResult = document.createElement('span');\n                                giftResult.textContent = userData.siteGiftDiffStr;\n                                giftResult.style.color = giftColor;\n                                statsSpan.appendChild(giftResult);\n\n                                statsSpan.appendChild(document.createTextNode('; '));\n\n                                if (expanded) {\n                                    const formula = document.createElement('span');\n                                    formula.textContent = `$${sentValue}-$${recValue}=`;\n                                    statsSpan.appendChild(formula);\n                                }\n                                const valueResult = document.createElement('span');\n                                valueResult.textContent = userData.siteValueDiffStr;\n                                valueResult.style.color = valueColor;\n                                statsSpan.appendChild(valueResult);\n\n                                statsSpan.appendChild(document.createTextNode(')'));\n\n                                if (expanded) {\n                                    const winsSpan = document.createElement('span');\n                                    winsSpan.textContent = ` ${giftsWon}`;\n                                    statsSpan.appendChild(winsSpan);\n                                }\n                            };\n\n                            let isExpanded = false;\n                            renderStats(isExpanded);\n\n                            statsSpan.addEventListener('mouseenter', () => { statsSpan.style.opacity = '0.7'; });\n                            statsSpan.addEventListener('mouseleave', () => { statsSpan.style.opacity = '1'; });\n                            statsSpan.addEventListener('click', (ev) => {\n                                ev.preventDefault();\n                                isExpanded = !isExpanded;\n                                renderStats(isExpanded);\n                            });\n\n                            resultContainer.appendChild(statsSpan);\n                        } else {\n                            const notMember = document.createElement('span');\n                            notMember.textContent = i18n.notFound;\n                            notMember.style.color = '#7f8c8d';\n                            notMember.style.fontStyle = 'italic';\n                            resultContainer.appendChild(notMember);\n                        }\n\n                        btn.replaceWith(resultContainer);\n                    } catch (err) {\n                        console.error('SteamGifts Group Stats error:', err);\n                        btn.disabled = false;\n                        btn.innerHTML = `<i class=\"fa fa-exclamation-triangle\"></i> ${i18n.error}`;\n                    }\n                });\n\n                container.appendChild(btn);\n            });\n\n        } catch (e) {\n            console.error('SteamGifts Group Stats: failed to load giveaway groups:', e);\n        }\n    }\n\n    init();\n})();\n",
+    3: "// ==UserScript==\n// @name         SteamGifts - Region Auto-Selector via SteamDB Tab\n// @name:ru      SteamGifts - Автовыбор регионов через SteamDB\n// @namespace    https://greasyfork.org/users/1522624-basimovif-ai\n// @version      1.5.0\n// @description  Bypasses Cloudflare by opening SteamDB in a temporary tab and auto-selects restricted countries when creating SteamGifts giveaways.\n// @description:ru Обходит Cloudflare открытием временной вкладки SteamDB и автоматически отмечает региональные ограничения при создании раздачи на SteamGifts.\n// @author       basimovif-ai\n// @license      MIT\n// @homepageURL  https://github.com/BasimovIF-AI/steamgifts-userscripts\n// @supportURL   https://github.com/BasimovIF-AI/steamgifts-userscripts/issues\n// @match        https://www.steamgifts.com/giveaways/new\n// @match        https://steamdb.info/sub/*\n// @grant        GM_setValue\n// @grant        GM_getValue\n// @grant        window.close\n// ==/UserScript==\n\n(function() {\n    'use strict';\n\n    const isRu = (navigator.language || '').toLowerCase().startsWith('ru');\n    const i18n = {\n        subIdLabel: 'SteamDB SubID:',\n        placeholder: isRu ? 'например, 828967' : 'e.g. 828967',\n        applyBtn: isRu ? 'Применить' : 'Apply',\n        enterValidSubId: isRu ? 'Введите корректный числовой SubID' : 'Please enter a valid numeric SubID',\n        openingTab: isRu ? 'Открытие вкладки SteamDB...' : 'Opening SteamDB tab...',\n        popupBlocked: isRu ? 'Браузер заблокировал открытие вкладки. Пожалуйста, разрешите всплывающие окна.' : 'Browser blocked opening a new tab. Please allow popups for SteamGifts.',\n        timeout: isRu ? 'Время ожидания истекло. Если вкладка зависла на Cloudflare, пройдите проверку вручную.' : 'Timeout waiting for SteamDB. If blocked by Cloudflare, solve captcha manually.',\n        noRestrictions: isRu ? 'Ограничений не найдено. Пакет доступен по всему миру.' : 'No restrictions found. Package is available worldwide.',\n        partialWarning: (count, missingList) => isRu\n            ? `Частично импортировано (выбрано: ${count}). Внимание! Отсутствуют на SteamGifts: ${missingList}`\n            : `Partially imported (selected: ${count}). Warning! Missing on SteamGifts: ${missingList}`,\n        success: (count) => isRu\n            ? `Успешно импортировано! Выбрано стран: ${count}`\n            : `Successfully imported! Countries selected: ${count}`,\n    };\n\n    if (location.hostname === 'www.steamgifts.com') {\n        runSteamGifts();\n    } else if (location.hostname === 'steamdb.info') {\n        runSteamDB();\n    }\n\n    // --- ЛОГИКА ДЛЯ СТРАНИЦЫ STEAMGIFTS ---\n    function runSteamGifts() {\n        let regionRow = null;\n        const headingTextElements = document.querySelectorAll('.form__heading__text');\n\n        headingTextElements.forEach(el => {\n            if (el.textContent.trim() === 'Region Restricted') {\n                regionRow = el.closest('.form__row');\n            }\n        });\n\n        if (!regionRow) return;\n\n        const container = document.createElement('div');\n        container.id = 'sg-steamdb-addon-container';\n        container.style.display = 'none';\n        container.style.alignItems = 'center';\n        container.style.marginLeft = '20px';\n        container.style.gap = '8px';\n\n        container.innerHTML = `\n            <span style=\"font-size: 12px; font-weight: normal; color: #555;\">${i18n.subIdLabel}</span>\n            <input type=\"text\" id=\"sg-subid-input\" placeholder=\"${i18n.placeholder}\" style=\"width: 100px; padding: 4px 6px; font-size: 12px; border: 1px solid #ccc; border-radius: 4px;\">\n            <button type=\"button\" id=\"sg-subid-btn\" style=\"padding: 4px 10px; font-size: 12px; background: #4b729f; color: #fff; border: none; border-radius: 4px; cursor: pointer;\">${i18n.applyBtn}</button>\n            <span id=\"sg-subid-status\" style=\"font-size: 11px; color: #666; font-weight: bold;\"></span>\n        `;\n\n        const heading = regionRow.querySelector('.form__heading');\n        if (heading) {\n            heading.appendChild(container);\n        }\n\n        const inputEl = document.getElementById('sg-subid-input');\n        const btnEl = document.getElementById('sg-subid-btn');\n        const statusEl = document.getElementById('sg-subid-status');\n\n        const yesCheckbox = regionRow.querySelector('div[data-checkbox-value=\"1\"]');\n        const noCheckbox = regionRow.querySelector('div[data-checkbox-value=\"0\"]');\n\n        function updateUiVisibility() {\n            if (yesCheckbox && yesCheckbox.classList.contains('is-selected')) {\n                container.style.setProperty('display', 'inline-flex', 'important');\n            } else {\n                container.style.setProperty('display', 'none', 'important');\n            }\n        }\n\n        if (yesCheckbox) yesCheckbox.addEventListener('click', () => setTimeout(updateUiVisibility, 50));\n        if (noCheckbox) noCheckbox.addEventListener('click', () => setTimeout(updateUiVisibility, 50));\n\n        setTimeout(updateUiVisibility, 200);\n\n        function setStatus(text, color) {\n            statusEl.textContent = text;\n            statusEl.style.color = color || '#666';\n        }\n\n        btnEl.addEventListener('click', () => {\n            const subId = inputEl.value.trim();\n            if (!subId || isNaN(subId)) {\n                setStatus(i18n.enterValidSubId, 'red');\n                return;\n            }\n\n            setStatus(i18n.openingTab, 'orange');\n\n            GM_setValue('parsed_sub_data', null);\n            GM_setValue('requested_sub', subId);\n\n            const steamDbUrl = `https://steamdb.info/sub/${subId}/?sg_sync=1`;\n            const newTab = window.open(steamDbUrl, '_blank');\n\n            if (!newTab) {\n                setStatus(i18n.popupBlocked, 'red');\n                return;\n            }\n\n            let attempts = 0;\n            const maxAttempts = 60;\n            const interval = setInterval(() => {\n                attempts++;\n                const result = GM_getValue('parsed_sub_data');\n\n                if (result && result.subId === subId) {\n                    clearInterval(interval);\n                    applyRestrictions(result);\n                } else if (attempts >= maxAttempts) {\n                    clearInterval(interval);\n                    setStatus(i18n.timeout, 'red');\n                }\n            }, 500);\n        });\n\n        function applyRestrictions(data) {\n            if (data.type === 'none') {\n                setStatus(i18n.noRestrictions, 'green');\n                if (noCheckbox && !noCheckbox.classList.contains('is-selected')) {\n                    noCheckbox.click();\n                    setTimeout(updateUiVisibility, 50);\n                }\n                return;\n            }\n\n            if (yesCheckbox && !yesCheckbox.classList.contains('is-selected')) {\n                yesCheckbox.click();\n            }\n\n            const sgItems = regionRow.querySelectorAll('.form_list_item');\n            const allSgCodes = [];\n\n            sgItems.forEach(item => {\n                const dataName = item.getAttribute('data-name') || '';\n                const code = dataName.split(' ').pop().toUpperCase();\n                if (code) {\n                    allSgCodes.push(code);\n                }\n            });\n\n            // Находим расхождения (страны из SteamDB, отсутствующие на SteamGifts)\n            const missingCountries = data.countries.filter(item => !allSgCodes.includes(item.code));\n\n            // Преобразуем данные в плоский массив кодов для выбора на странице\n            const dbCodes = data.countries.map(item => item.code);\n\n            let targetCodes = [];\n            if (data.type === 'only') {\n                targetCodes = dbCodes;\n            } else if (data.type === 'not') {\n                targetCodes = allSgCodes.filter(code => !dbCodes.includes(code));\n            }\n\n            // Изменяем чекбоксы\n            sgItems.forEach(item => {\n                const dataName = item.getAttribute('data-name') || '';\n                const code = dataName.split(' ').pop().toUpperCase();\n                const isSelected = item.classList.contains('is-selected');\n                const shouldBeSelected = targetCodes.includes(code);\n\n                if (isSelected !== shouldBeSelected) {\n                    item.click();\n                }\n            });\n\n            // Считаем количество РЕАЛЬНО отмеченных галочек на странице\n            const actualSelectedCount = regionRow.querySelectorAll('.form_list_item.is-selected').length;\n\n            if (missingCountries.length > 0) {\n                const missingTextList = missingCountries.map(item => `${item.name} (${item.code})`).join(', ');\n                setStatus(i18n.partialWarning(actualSelectedCount, missingTextList), '#d97706');\n            } else {\n                setStatus(i18n.success(actualSelectedCount), 'green');\n            }\n        }\n    }\n\n    // --- ЛОГИКА ДЛЯ ВРЕМЕННОЙ ВКЛАДКИ STEAMDB ---\n    function runSteamDB() {\n        if (!location.search.includes('sg_sync=1')) {\n            return;\n        }\n\n        const match = location.pathname.match(/\\/sub\\/(\\d+)/);\n        if (!match) return;\n        const subId = match[1];\n\n        const requestedSub = GM_getValue('requested_sub');\n        if (requestedSub !== subId) return;\n\n        const isPageLoaded = document.getElementById('info') || document.querySelector('.pageheader');\n        if (!isPageLoaded) return;\n\n        const restrictionPanel = document.querySelector('.panel-error');\n        let type = 'none';\n        const countries = []; // Содержит объекты вида { code: 'FR', name: 'France' }\n\n        if (restrictionPanel) {\n            const headingSpan = restrictionPanel.querySelector('.panel-heading span');\n            if (headingSpan) {\n                const text = headingSpan.textContent.trim();\n                if (text.includes('can only be activated')) {\n                    type = 'only';\n                } else if (text.includes('can NOT be activated')) {\n                    type = 'not';\n                }\n            }\n\n            // Парсим список стран (коды + текстовые названия)\n            const listItems = restrictionPanel.querySelectorAll('.country-list-grid li');\n            listItems.forEach(li => {\n                const img = li.querySelector('img');\n                if (!img) return;\n\n                const src = img.getAttribute('src') || '';\n                const m = src.match(/\\/country\\/([a-z0-9]+)\\.svg/i);\n                if (m) {\n                    const code = m[1].toUpperCase();\n                    const span = li.querySelector('span');\n                    let name = span ? span.textContent : li.textContent;\n                    name = name.replace(/\\s+/g, ' ').trim();\n\n                    countries.push({\n                        code: code,\n                        name: name\n                    });\n                }\n            });\n        }\n\n        GM_setValue('parsed_sub_data', {\n            subId: subId,\n            type: type,\n            countries: countries,\n            timestamp: Date.now()\n        });\n\n        window.close();\n    }\n})();\n",
+    4: "// ==UserScript==\n// @name         SteamGifts - Unlucky-7 Winner Stats & Copy\n// @name:ru      SteamGifts - Статистика победителей Unlucky-7 и копирование\n// @namespace    https://greasyfork.org/users/1522624-basimovif-ai\n// @version      1.4.1\n// @description  Displays interactive winner stats for the Unlucky-7 group on giveaway pages and allows copying formatted data to the clipboard.\n// @description:ru Отображает интерактивную статистику победителей группы Unlucky-7 на страницах раздач и позволяет копировать отформатированные данные в буфер обмена.\n// @author       basimovif-ai\n// @license      MIT\n// @homepageURL  https://github.com/BasimovIF-AI/steamgifts-userscripts\n// @supportURL   https://github.com/BasimovIF-AI/steamgifts-userscripts/issues\n// @match        https://www.steamgifts.com/giveaway/*/winners\n// @grant        none\n// ==/UserScript==\n\n(function() {\n    'use strict';\n\n    const isRu = (navigator.language || '').toLowerCase().startsWith('ru');\n    const i18n = {\n        formulaTitle: isRu ? 'Нажмите для полной формулы расчета' : 'Click to toggle calculation formula',\n        copyTitle: isRu ? 'Скопировать информацию о победителе' : 'Copy winner info to clipboard',\n        errorLog: isRu ? 'Ошибка при сборе данных для пользователя ' : 'Error fetching data for user ',\n    };\n\n    // 1. Проверяем наличие группы \"Unlucky-7\" на странице раздачи\n    const groupLink = Array.from(document.querySelectorAll('a.featured__column--group'))\n        .find(el => el.getAttribute('title') === 'Unlucky-7' || el.textContent.trim() === 'Unlucky-7');\n\n    if (!groupLink) {\n        return; // Если группа не найдена, завершаем работу\n    }\n\n    const groupSearchBaseUrl = 'https://www.steamgifts.com/group/WWF2y/unlucky-7/users/search?q=';\n    const gaUrl = window.location.origin + window.location.pathname.replace(/\\/winners$/, '');\n\n    // Вспомогательная функция для получения порядкового суффикса числительных (1st, 2nd, 3rd, 4th...)\n    const getOrdinalSuffix = (num) => {\n        const j = num % 10, k = num % 100;\n        if (j === 1 && k !== 11) return num + \"st\";\n        if (j === 2 && k !== 12) return num + \"nd\";\n        if (j === 3 && k !== 13) return num + \"rd\";\n        return num + \"th\";\n    };\n\n    // Вспомогательные функции парсинга\n    const parseSentRec = (text) => {\n        const cleaned = text.replace(/,/g, '');\n        const m = cleaned.match(/([\\d.]+)\\s*\\(\\$([\\d.]+)\\)/);\n        return m ? [parseFloat(m[1]), parseFloat(m[2])] : [0, 0];\n    };\n\n    const parseDiff = (text) => {\n        return parseFloat(text.replace(/[^0-9.-]/g, ''));\n    };\n\n    // 2. Находим всех победителей в таблице\n    const winnerRows = document.querySelectorAll('.table__rows .table__row-outer-wrap');\n\n    winnerRows.forEach(row => {\n        const userLink = row.querySelector('.table__column__heading a');\n        if (!userLink) return;\n\n        const username = userLink.textContent.trim();\n        const parentNode = userLink.parentNode;\n\n        // Создаем индикатор загрузки\n        const loader = document.createElement('i');\n        loader.className = 'fa fa-refresh fa-spin';\n        loader.style.marginLeft = '8px';\n        loader.style.color = '#7f8c8d';\n        loader.style.fontSize = '12px';\n        parentNode.appendChild(loader);\n\n        const groupSearchUrl = groupSearchBaseUrl + encodeURIComponent(username);\n        const profileUrl = `https://www.steamgifts.com/user/${username}`;\n\n        // Выполняем запросы к группе и к профилю параллельно\n        Promise.all([\n            fetch(groupSearchUrl).then(r => r.text()),\n            fetch(profileUrl).then(r => r.text())\n        ])\n        .then(([groupHtml, profileHtml]) => {\n            loader.remove();\n\n            const parser = new DOMParser();\n\n            // --- Парсинг данных из группы ---\n            const groupDoc = parser.parseFromString(groupHtml, 'text/html');\n            const memberRows = groupDoc.querySelectorAll('.table__rows .table__row-outer-wrap');\n            let userData = null;\n\n            for (const memberRow of memberRows) {\n                const nameEl = memberRow.querySelector('.table__column__heading');\n                if (nameEl && nameEl.textContent.trim().toLowerCase() === username.toLowerCase()) {\n                    const cols = memberRow.querySelectorAll('.table__column--width-small.text-center');\n                    if (cols.length >= 4) {\n                        userData = {\n                            sentText: cols[0].textContent.trim(),\n                            recText: cols[1].textContent.trim(),\n                            siteGiftDiffStr: cols[2].textContent.trim(),\n                            siteValueDiffStr: cols[3].textContent.trim()\n                        };\n                        break;\n                    }\n                }\n            }\n\n            if (!userData) return;\n\n            // --- Парсинг \"Gifts Won\" из профиля ---\n            const profileDoc = parser.parseFromString(profileHtml, 'text/html');\n            const profileRows = profileDoc.querySelectorAll('.featured__table__row');\n            let giftsWon = 0;\n\n            for (const pRow of profileRows) {\n                const left = pRow.querySelector('.featured__table__row__left');\n                if (left && left.textContent.trim() === 'Gifts Won') {\n                    const right = pRow.querySelector('.featured__table__row__right a');\n                    if (right) {\n                        giftsWon = parseInt(right.textContent.replace(/,/g, ''), 10);\n                    }\n                    break;\n                }\n            }\n\n            // Вычисления и независимая валидация для каждой разницы\n            const [sentCount, sentValue] = parseSentRec(userData.sentText);\n            const [recCount, recValue] = parseSentRec(userData.recText);\n            const siteGiftDiff = parseDiff(userData.siteGiftDiffStr);\n            const siteValueDiff = parseDiff(userData.siteValueDiffStr);\n\n            const calculatedGiftDiff = sentCount - recCount;\n            const calculatedValueDiff = sentValue - recValue;\n\n            const isGiftMatch = Math.abs(calculatedGiftDiff - siteGiftDiff) < 0.05;\n            const isValueMatch = Math.abs(calculatedValueDiff - siteValueDiff) < 0.05;\n\n            const giftColor = isGiftMatch ? '#2e7d32' : '#c62828';\n            const valueColor = isValueMatch ? '#2e7d32' : '#c62828';\n\n            // Отрисовка интерактивного элемента статистики\n            const statsContainer = document.createElement('span');\n            statsContainer.style.cursor = 'pointer';\n            statsContainer.style.marginLeft = '8px';\n            statsContainer.style.fontSize = '12px';\n            statsContainer.style.fontWeight = 'bold';\n            statsContainer.style.userSelect = 'none';\n            statsContainer.style.color = '#7f8c8d';\n            statsContainer.style.transition = 'opacity 0.15s ease';\n            statsContainer.title = i18n.formulaTitle;\n\n            // Генерация DOM структуры в зависимости от состояния свертки\n            const renderStats = (expanded) => {\n                statsContainer.innerHTML = '';\n\n                // Открывающая скобка\n                const openBracket = document.createElement('span');\n                openBracket.textContent = '(';\n                statsContainer.appendChild(openBracket);\n\n                // Блок разницы подарков\n                if (expanded) {\n                    const formula = document.createElement('span');\n                    formula.textContent = `${sentCount}-${recCount}=`;\n                    statsContainer.appendChild(formula);\n                }\n                const giftResult = document.createElement('span');\n                giftResult.textContent = userData.siteGiftDiffStr;\n                giftResult.style.color = giftColor;\n                statsContainer.appendChild(giftResult);\n\n                // Разделитель\n                const separator = document.createElement('span');\n                separator.textContent = '; ';\n                statsContainer.appendChild(separator);\n\n                // Блок разницы стоимости\n                if (expanded) {\n                    const formula = document.createElement('span');\n                    formula.textContent = `$${sentValue}-$${recValue}=`;\n                    statsContainer.appendChild(formula);\n                }\n                const valueResult = document.createElement('span');\n                valueResult.textContent = userData.siteValueDiffStr;\n                valueResult.style.color = valueColor;\n                statsContainer.appendChild(valueResult);\n\n                // Закрывающая скобка\n                const closeBracket = document.createElement('span');\n                closeBracket.textContent = ')';\n                statsContainer.appendChild(closeBracket);\n\n                // Количество побед в развернутом режиме\n                if (expanded) {\n                    const winsSpan = document.createElement('span');\n                    winsSpan.textContent = ` ${giftsWon}`;\n                    statsContainer.appendChild(winsSpan);\n                }\n            };\n\n            let isExpanded = false;\n            renderStats(isExpanded);\n\n            statsContainer.addEventListener('mouseenter', () => { statsContainer.style.opacity = '0.7'; });\n            statsContainer.addEventListener('mouseleave', () => { statsContainer.style.opacity = '1'; });\n\n            statsContainer.addEventListener('click', (e) => {\n                e.preventDefault();\n                isExpanded = !isExpanded;\n                renderStats(isExpanded);\n            });\n\n            parentNode.appendChild(statsContainer);\n\n            // --- Создание кнопки копирования ---\n            const badgeText = (giftsWon <= 8)\n                ? `${getOrdinalSuffix(giftsWon)} win`\n                : `Gifter, ${userData.siteGiftDiffStr}`;\n\n            const clipboardText = `GA: ${gaUrl}\\nWinner: ${profileUrl} (${badgeText})`;\n\n            const copyBtn = document.createElement('i');\n            copyBtn.className = 'fa fa-clipboard';\n            copyBtn.style.marginLeft = '8px';\n            copyBtn.style.cursor = 'pointer';\n            copyBtn.style.color = '#7f8c8d';\n            copyBtn.style.fontSize = '12px';\n            copyBtn.style.transition = 'color 0.15s ease';\n            copyBtn.title = i18n.copyTitle;\n\n            copyBtn.addEventListener('mouseenter', () => { copyBtn.style.color = '#333'; });\n            copyBtn.addEventListener('mouseleave', () => { copyBtn.style.color = '#7f8c8d'; });\n\n            copyBtn.addEventListener('click', (e) => {\n                e.preventDefault();\n                navigator.clipboard.writeText(clipboardText).then(() => {\n                    copyBtn.className = 'fa fa-check';\n                    copyBtn.style.color = '#2e7d32';\n                    setTimeout(() => {\n                        copyBtn.className = 'fa fa-clipboard';\n                        copyBtn.style.color = '#7f8c8d';\n                    }, 1500);\n                }).catch(err => {\n                    console.error('SteamGifts Unlucky-7: clipboard error:', err);\n                });\n            });\n\n            parentNode.appendChild(copyBtn);\n        })\n        .catch(err => {\n            loader.remove();\n            console.error(i18n.errorLog + username, err);\n        });\n    });\n})();\n"
+};
+
+function copyCode(btn, id) {
+    const code = scripts[id];
+    navigator.clipboard.writeText(code).then(() => {
+        const originalText = btn.innerHTML;
+        btn.innerHTML = '✅ Скопировано в буфер!';
+        btn.classList.add('btn-copied');
+        setTimeout(() => {
+            btn.innerHTML = originalText;
+            btn.classList.remove('btn-copied');
+        }, 2500);
+    }).catch(err => {
+        alert('Не удалось скопировать: ' + err);
+    });
+}
+</script>
 </body>
 </html>
