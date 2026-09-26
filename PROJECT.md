@@ -8,6 +8,8 @@
 | `steamgifts-group-stats-checker.user.js` | Userscript | `https://www.steamgifts.com/giveaway/*` | Запрос и сверка статистики пользователя в группах раздачи + авто-комментарий автору. |
 | `steamgifts-region-auto-selector.user.js` | Userscript | `.../giveaways/new` & `steamdb.info/sub/*` | Автоматизация выбора регионов при создании раздачи через временную вкладку SteamDB. |
 | `steamgifts-unlucky-7-winner-stats-copy.user.js` | Userscript | `.../giveaway/*/winners` | Проверка баланса участников группы Unlucky-7 и копирование форматированной строки. |
+| `tools/greasyfork-auto-publisher.user.js` | Tool / Userscript | `greasyfork.org/*` | Автоматизация публикации, обновления и оформления Markdown-описания на GreasyFork. |
+| `publish_to_greasyfork.html` | Tool / Hub | Local Browser | Центр управления публикацией и копирования кода / описаний в 1 клик. |
 | `README.md` | Doc | — | Каталог скриптов, инструкции по установке (EN). |
 | `README.ru.md` | Doc | — | Каталог скриптов, инструкции по установке (RU). |
 | `CHANGELOG.md` | Doc | — | Журнал версий по стандарту Keep a Changelog. |
@@ -81,3 +83,9 @@
    - Используется порог эпсилон `Math.abs(calculatedDiff - siteDiff) < 0.05` для исключения ошибок округления цен в центах.
 3. **Автоопределение языка (i18n)**:
    - Все 4 скрипта используют `(navigator.language || '').toLowerCase().startsWith('ru')`, обеспечивая бесшовный английский интерфейс для мировой аудитории GreasyFork и русский для русскоязычных пользователей.
+4. **Регламент публикации и маппинг в GreasyFork**:
+   - `SteamGifts - Chance Per Point`: ID **597589** (опубликован; для обновления оформления используется `/admin`).
+   - `SteamGifts - Unlucky-7 Winner Stats & Copy`: ID **580030** (опубликован; обновляется через `/versions/new` для загрузки v1.4.1 с русскими тегами).
+   - `SteamGifts - Group Stats Checker`: Новый скрипт (создается через `/script_versions/new`).
+   - `SteamGifts - Region Auto-Selector`: Новый скрипт (создается через `/script_versions/new`).
+   - При публикации одинакового кода GreasyFork требует подтверждения чекбоксом `allow_code_previously_posted`, который скрипт-помощник отмечает автоматически.

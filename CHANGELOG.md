@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [GreasyFork Auto-Publisher Tool - 1.3.0] - 2026-09-27
+### Added
+- Local publisher hub `publish_to_greasyfork.html` with 1-click clipboard copy for code and rich Markdown descriptions.
+- `tools/greasyfork-auto-publisher.user.js`: automated script publisher for GreasyFork supporting `/admin` description editing, `/versions/new` version updates, and `/script_versions/new` initial publication.
+- Auto-selection of Markdown markup, CodeMirror syncing, duplicate code warning override, and 6-second countdown with pause control.
+
+---
+
 ## [Unlucky-7 Winner Stats & Copy - 1.4.1] - 2026-09-27
 ### Added
 - Internationalization support (English & Russian auto-switching for tooltips and console logs).
