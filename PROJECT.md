@@ -8,7 +8,8 @@
 | `steamgifts-group-stats-checker.user.js` | Userscript | `https://www.steamgifts.com/giveaway/*` | Запрос и сверка статистики пользователя в группах раздачи + авто-комментарий автору. |
 | `steamgifts-region-auto-selector.user.js` | Userscript | `.../giveaways/new` & `steamdb.info/sub/*` | Автоматизация выбора регионов при создании раздачи через временную вкладку SteamDB. |
 | `steamgifts-unlucky-7-winner-stats-copy.user.js` | Userscript | `.../giveaway/*/winners` | Проверка баланса участников группы Unlucky-7 и копирование форматированной строки. |
-| `README.md` | Doc | — | Каталог скриптов, инструкции по установке, ссылки на GreasyFork. |
+| `README.md` | Doc | — | Каталог скриптов, инструкции по установке (EN). |
+| `README.ru.md` | Doc | — | Каталог скриптов, инструкции по установке (RU). |
 | `CHANGELOG.md` | Doc | — | Журнал версий по стандарту Keep a Changelog. |
 | `walkthrough.md` | Doc | — | Инструкция по синхронизации с GreasyFork и проверке скриптов. |
 
