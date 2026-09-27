@@ -1,13 +1,19 @@
 #!/usr/bin/env node
 
+/**
+ * GreasyFork Universal Persistent CLI Bridge (v3.0.0)
+ * 
+ * Acts as the agent's server, communicating directly with the open GreasyFork
+ * browser tab via HTTP (127.0.0.1:18234) for completely automated publishing.
+ */
+
 const http = require('http');
 const fs = require('fs');
 const path = require('path');
-const { execSync } = require('child_process');
 
 const PORT = 18234;
+const rootDir = path.resolve(__dirname, '..');
 
-// Описания для скриптов проекта SteamGifts
 const DESCRIPTIONS = {
     'steamgifts-chance-per-point.user.js': `### 🎯 About / О скрипте
 **EN**: Calculates your **exact win probability per single entry point in basis points (‱)** and adds a dynamic filter to hide low-yield giveaways on SteamGifts.
@@ -104,14 +110,55 @@ const DESCRIPTIONS = {
 * **License**: [MIT License](https://opensource.org/licenses/MIT)`
 };
 
-// Хранилище активных задач
-const jobs = new Map();
+// Очередь задач для публикации
+const queue = [
+    {
+        id: 'job-1',
+        name: '1. SteamGifts - Chance Per Point (ID: 597589)',
+        action: 'edit_desc',
+        scriptId: '597589',
+        scriptSlug: '597589-steamgifts-chance-per-point',
+        url: 'https://greasyfork.org/ru/scripts/597589-steamgifts-chance-per-point/admin',
+        description: DESCRIPTIONS['steamgifts-chance-per-point.user.js']
+    },
+    {
+        id: 'job-2',
+        name: '2. SteamGifts - Unlucky-7 Winner Stats & Copy (ID: 580030, v1.4.1)',
+        action: 'update',
+        scriptId: '580030',
+        scriptSlug: '580030-steamgifts-unlucky-7-winner-stats-copy',
+        url: 'https://greasyfork.org/ru/scripts/580030-steamgifts-unlucky-7-winner-stats-copy/versions/new',
+        code: fs.readFileSync(path.join(rootDir, 'steamgifts-unlucky-7-winner-stats-copy.user.js'), 'utf8'),
+        changelog: 'v1.4.1: Added Russian localization (@name:ru, @description:ru) for GreasyFork catalog',
+        description: DESCRIPTIONS['steamgifts-unlucky-7-winner-stats-copy.user.js']
+    },
+    {
+        id: 'job-3',
+        name: '3. SteamGifts - Group Stats Checker (v1.7.0, Новый скрипт)',
+        action: 'publish',
+        url: 'https://greasyfork.org/ru/script_versions/new',
+        code: fs.readFileSync(path.join(rootDir, 'steamgifts-group-stats-checker.user.js'), 'utf8'),
+        description: DESCRIPTIONS['steamgifts-group-stats-checker.user.js']
+    },
+    {
+        id: 'job-4',
+        name: '4. SteamGifts - Region Auto-Selector (v1.5.0, Новый скрипт)',
+        action: 'publish',
+        url: 'https://greasyfork.org/ru/script_versions/new',
+        code: fs.readFileSync(path.join(rootDir, 'steamgifts-region-auto-selector.user.js'), 'utf8'),
+        description: DESCRIPTIONS['steamgifts-region-auto-selector.user.js']
+    }
+];
+
+let currentIndex = 0;
+const results = [];
+let tabConnected = false;
 
 function createServer() {
     return http.createServer((req, res) => {
         const parsedUrl = new URL(req.url, `http://127.0.0.1:${PORT}`);
 
-        // CORS заголовки
+        // CORS headers
         res.setHeader('Access-Control-Allow-Origin', '*');
         res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
         res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
@@ -122,37 +169,76 @@ function createServer() {
             return;
         }
 
-        // Эндпоинт отдачи задачи в Tampermonkey
-        if (parsedUrl.pathname === '/job') {
-            const jId = parsedUrl.searchParams.get('id');
-            const job = jobs.get(jId) || jobs.get('default');
-
-            if (!job) {
-                res.writeHead(404, { 'Content-Type': 'application/json' });
-                res.end(JSON.stringify({ error: 'Job not found' }));
-                return;
+        // 1. Health check & handshake
+        if (parsedUrl.pathname === '/ping' || parsedUrl.pathname === '/health') {
+            if (!tabConnected) {
+                tabConnected = true;
+                console.log('🟢 [Bridge] Вкладка Firefox успешно подключилась к агенту!');
             }
-
-            res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
-            res.end(JSON.stringify(job));
+            res.writeHead(200, { 'Content-Type': 'application/json' });
+            res.end(JSON.stringify({
+                status: 'ok',
+                connected: true,
+                currentIndex: currentIndex,
+                total: queue.length,
+                pendingCount: queue.length - currentIndex
+            }));
             return;
         }
 
-        // Эндпоинт отчёта о статусе от Tampermonkey
+        // 2. Next job for the browser tab
+        if (parsedUrl.pathname === '/next-job') {
+            if (!tabConnected) {
+                tabConnected = true;
+                console.log('🟢 [Bridge] Вкладка Firefox запросила задачу!');
+            }
+
+            if (currentIndex >= queue.length) {
+                res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
+                res.end(JSON.stringify({ allDone: true }));
+                return;
+            }
+
+            const currentJob = queue[currentIndex];
+            res.writeHead(200, { 'Content-Type': 'application/json; charset=utf-8' });
+            res.end(JSON.stringify({
+                job: currentJob,
+                index: currentIndex + 1,
+                total: queue.length
+            }));
+            return;
+        }
+
+        // 3. Status report from the browser tab
         if (parsedUrl.pathname === '/report' && req.method === 'POST') {
             let body = '';
             req.on('data', chunk => body += chunk);
             req.on('end', () => {
                 try {
                     const data = JSON.parse(body);
-                    console.log(`[Bridge Report] Статус: ${data.status} | URL: ${data.url}`);
-                    const job = jobs.get(data.jobId) || jobs.get('default');
-                    if (job && job.onReport) {
-                        job.onReport(data);
+
+                    if (data.status === 'success') {
+                        const job = queue[currentIndex];
+                        console.log(`✅ [${currentIndex + 1}/${queue.length}] ${job.name} -> ${data.finalUrl}`);
+                        results.push({ name: job.name, url: data.finalUrl });
+                        currentIndex++;
+                    } else if (data.status === 'navigating') {
+                        console.log(`⏳ [${currentIndex + 1}/${queue.length}] Переход: ${data.url}`);
+                    } else if (data.status === 'submitting') {
+                        console.log(`🚀 [${currentIndex + 1}/${queue.length}] Отправка формы в GreasyFork...`);
+                    } else if (data.status === 'error') {
+                        console.error(`❌ [Ошибка шага] ${data.error}`);
                     }
-                } catch (e) {}
+
+                    if (data.allDone || currentIndex >= queue.length) {
+                        finishAll();
+                    }
+                } catch (e) {
+                    console.error('Error parsing report:', e);
+                }
+
                 res.writeHead(200, { 'Content-Type': 'application/json' });
-                res.end(JSON.stringify({ ok: true }));
+                res.end(JSON.stringify({ ok: true, nextIndex: currentIndex }));
             });
             return;
         }
@@ -162,166 +248,36 @@ function createServer() {
     });
 }
 
-function openUrl(url) {
-    console.log(`[Browser] Открытие: ${url}`);
-    execSync(`powershell.exe -NoProfile -Command "Start-Process '${url}'"`);
-}
+let serverInstance = null;
 
-function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
+function finishAll() {
+    console.log('\n======================================================');
+    console.log('🎉 ВСЕ 4 СКРИПТА УСПЕШНО ОПУБЛИКОВАНЫ И ОФОРМЛЕНЫ:');
+    for (const r of results) {
+        console.log(`  • ${r.name} -> ${r.url}`);
+    }
+    console.log('======================================================\n');
 
-async function runJob(server, job) {
-    const jobId = 'job_' + Date.now();
-    job.jobId = jobId;
-
-    return new Promise(async (resolve) => {
-        let isDone = false;
-
-        job.onReport = (data) => {
-            if (data.status === 'submitting') {
-                console.log(`[Job ${jobId}] Форма успешно отправлена в GreasyFork!`);
-            }
-        };
-
-        jobs.set(jobId, job);
-        jobs.set('default', job);
-
-        let targetUrl = '';
-        const slug = job.scriptSlug || job.scriptId;
-        if (job.action === 'publish') {
-            targetUrl = `https://greasyfork.org/ru/script_versions/new?bridge=${PORT}&job=${jobId}`;
-        } else if (job.action === 'update') {
-            targetUrl = `https://greasyfork.org/ru/scripts/${slug}/versions/new?bridge=${PORT}&job=${jobId}`;
-        } else if (job.action === 'edit_desc') {
-            targetUrl = `https://greasyfork.org/ru/scripts/${slug}/admin?bridge=${PORT}&job=${jobId}`;
-        }
-
-        openUrl(targetUrl);
-
-        const waitTime = job.waitMs || 15000;
-        console.log(`[Job ${jobId}] Ожидание выполнения авто-заполнения и отправки (${waitTime / 1000} сек)...`);
-        await sleep(waitTime);
-
-        jobs.delete(jobId);
-        resolve();
-    });
-}
-
-async function main() {
-    const args = process.argv.slice(2);
-    const isAll = args.includes('--all') || args.includes('-a') || args.length === 0;
-
-    const server = createServer();
-    server.listen(PORT, '127.0.0.1', async () => {
-        console.log(`=== GREASYFORK UNIVERSAL CLI BRIDGE ЗАПУЩЕН НА ПОРТУ ${PORT} ===\n`);
-
-        try {
-            if (isAll) {
-                console.log('--- ПАКЕТНЫЙ РЕЖИМ: ПУБЛИКАЦИЯ И ОБНОВЛЕНИЕ ВСЕХ 4 СКРИПТОВ STEAMGIFTS ---\n');
-
-                const rootDir = path.resolve(__dirname, '..');
-
-                const batchJobs = [
-                    {
-                        name: '1. SteamGifts - Chance Per Point (ID: 597589)',
-                        action: 'edit_desc',
-                        scriptId: '597589',
-                        scriptSlug: '597589-steamgifts-chance-per-point',
-                        code: fs.readFileSync(path.join(rootDir, 'steamgifts-chance-per-point.user.js'), 'utf8'),
-                        description: DESCRIPTIONS['steamgifts-chance-per-point.user.js'],
-                        autoSubmit: true,
-                        waitMs: 14000
-                    },
-                    {
-                        name: '2. SteamGifts - Unlucky-7 (ID: 580030, v1.4.1)',
-                        action: 'update',
-                        scriptId: '580030',
-                        scriptSlug: '580030-steamgifts-unlucky-7-winner-stats-copy',
-                        code: fs.readFileSync(path.join(rootDir, 'steamgifts-unlucky-7-winner-stats-copy.user.js'), 'utf8'),
-                        description: DESCRIPTIONS['steamgifts-unlucky-7-winner-stats-copy.user.js'],
-                        changelog: 'v1.4.1: Added Russian localization (@name:ru, @description:ru) for GreasyFork catalog',
-                        autoSubmit: true,
-                        waitMs: 15000
-                    },
-                    {
-                        name: '3. SteamGifts - Group Stats Checker (v1.7.0, Новый)',
-                        action: 'publish',
-                        code: fs.readFileSync(path.join(rootDir, 'steamgifts-group-stats-checker.user.js'), 'utf8'),
-                        description: DESCRIPTIONS['steamgifts-group-stats-checker.user.js'],
-                        autoSubmit: true,
-                        waitMs: 18000
-                    },
-                    {
-                        name: '4. SteamGifts - Region Auto-Selector (v1.5.0, Новый)',
-                        action: 'publish',
-                        code: fs.readFileSync(path.join(rootDir, 'steamgifts-region-auto-selector.user.js'), 'utf8'),
-                        description: DESCRIPTIONS['steamgifts-region-auto-selector.user.js'],
-                        autoSubmit: true,
-                        waitMs: 18000
-                    }
-                ];
-
-                for (let i = 0; i < batchJobs.length; i++) {
-                    const j = batchJobs[i];
-                    console.log(`\n======================================================`);
-                    console.log(`[${i + 1}/${batchJobs.length}] ${j.name}`);
-                    console.log(`======================================================`);
-                    await runJob(server, j);
-                }
-
-                console.log('\n=== ВСЕ 4 СКРИПТА УСПЕШНО ОБРАБОТАНЫ И ОПУБЛИКОВАНЫ! ===');
-
-            } else {
-                // Одиночный режим через аргументы командной строки
-                let filePath = '';
-                let descPath = '';
-                let scriptId = '';
-                let changelog = '';
-                let action = 'publish';
-
-                for (let i = 0; i < args.length; i++) {
-                    if (args[i] === '--file' && args[i + 1]) filePath = args[++i];
-                    if (args[i] === '--desc' && args[i + 1]) descPath = args[++i];
-                    if (args[i] === '--id' && args[i + 1]) scriptId = args[++i];
-                    if (args[i] === '--changelog' && args[i + 1]) changelog = args[++i];
-                    if (args[i] === '--action' && args[i + 1]) action = args[++i];
-                }
-
-                let code = '';
-                if (filePath && fs.existsSync(filePath)) {
-                    code = fs.readFileSync(filePath, 'utf8');
-                }
-
-                let description = '';
-                if (descPath) {
-                    if (fs.existsSync(descPath)) {
-                        description = fs.readFileSync(descPath, 'utf8');
-                    } else {
-                        description = descPath;
-                    }
-                }
-
-                const singleJob = {
-                    action: action,
-                    scriptId: scriptId,
-                    code: code,
-                    description: description,
-                    changelog: changelog,
-                    autoSubmit: true,
-                    waitMs: 16000
-                };
-
-                await runJob(server, singleJob);
-                console.log('\n=== ЗАДАЧА УСПЕШНО ВЫПОЛНЕНА! ===');
-            }
-
-        } finally {
-            server.close(() => {
-                console.log('\n[Bridge] Сервер завершил работу.');
+    setTimeout(() => {
+        if (serverInstance) {
+            serverInstance.close(() => {
+                console.log('[Bridge] Сервер завершил работу. Готово!');
                 process.exit(0);
             });
         }
+    }, 1500);
+}
+
+function main() {
+    serverInstance = createServer();
+    serverInstance.listen(PORT, '127.0.0.1', () => {
+        console.log('======================================================');
+        console.log(`🤖 GREASYFORK AGENT BRIDGE v3.0.0 ЗАПУЩЕН НА ПОРТУ ${PORT}`);
+        console.log('======================================================');
+        console.log('⏳ Ожидание подключения вкладки GreasyFork в Firefox...');
+        console.log('👉 Пожалуйста, откройте любую страницу GreasyFork в браузере');
+        console.log('   (например: https://greasyfork.org/ru/users/1522624-basimovif-ai)');
+        console.log('======================================================\n');
     });
 }
 

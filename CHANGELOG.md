@@ -7,6 +7,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [GreasyFork Persistent Browser Tab Bridge - 3.0.0] - 2026-09-27
+### Added
+- **Persistent Browser Tab Bridge** (`tools/greasyfork-auto-publisher.user.js` v3.0.0):
+  - Listens to local agent daemon (`http://127.0.0.1:18234`) from any open GreasyFork page in Firefox.
+  - Floating live status badge (`⚪ Ожидание`, `🟢 На связи`, `🚀 Публикация [X/Y]`).
+  - Robust `sessionStorage` state machine managing navigation, CodeMirror code injection, Markdown description styling, version update chaining, and duplicate warning overrides.
+  - Reports final URLs directly back to the agent CLI upon task completion.
+- **Agent Bridge CLI Server** (`tools/greasyfork-cli.js` v3.0.0):
+  - Lightweight local server (port 18234) with CORS and real-time live console reporting.
+  - Feeds batch publication jobs sequentially to the active browser tab.
+  - Bypasses Windows Session Isolation and Cloudflare WAF entirely with 0 clicks required from the user on GreasyFork.
+
+---
+
 ## [GreasyFork Universal Bridge & Hub - 2.1.0] - 2026-09-27
 ### Added
 - **Universal Bridge UserScript** (`tools/greasyfork-auto-publisher.user.js` v2.1.0):
