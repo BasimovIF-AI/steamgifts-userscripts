@@ -164,7 +164,7 @@ function createServer() {
 
 function openUrl(url) {
     console.log(`[Browser] Открытие: ${url}`);
-    execSync(`start "" "${url}"`, { shell: 'cmd.exe' });
+    execSync(`powershell.exe -NoProfile -Command "Start-Process '${url}'"`);
 }
 
 function sleep(ms) {
@@ -188,12 +188,13 @@ async function runJob(server, job) {
         jobs.set('default', job);
 
         let targetUrl = '';
+        const slug = job.scriptSlug || job.scriptId;
         if (job.action === 'publish') {
             targetUrl = `https://greasyfork.org/ru/script_versions/new?bridge=${PORT}&job=${jobId}`;
         } else if (job.action === 'update') {
-            targetUrl = `https://greasyfork.org/ru/scripts/${job.scriptId}/versions/new?bridge=${PORT}&job=${jobId}`;
+            targetUrl = `https://greasyfork.org/ru/scripts/${slug}/versions/new?bridge=${PORT}&job=${jobId}`;
         } else if (job.action === 'edit_desc') {
-            targetUrl = `https://greasyfork.org/ru/scripts/${job.scriptId}/admin?bridge=${PORT}&job=${jobId}`;
+            targetUrl = `https://greasyfork.org/ru/scripts/${slug}/admin?bridge=${PORT}&job=${jobId}`;
         }
 
         openUrl(targetUrl);
@@ -226,6 +227,7 @@ async function main() {
                         name: '1. SteamGifts - Chance Per Point (ID: 597589)',
                         action: 'edit_desc',
                         scriptId: '597589',
+                        scriptSlug: '597589-steamgifts-chance-per-point',
                         code: fs.readFileSync(path.join(rootDir, 'steamgifts-chance-per-point.user.js'), 'utf8'),
                         description: DESCRIPTIONS['steamgifts-chance-per-point.user.js'],
                         autoSubmit: true,
@@ -235,6 +237,7 @@ async function main() {
                         name: '2. SteamGifts - Unlucky-7 (ID: 580030, v1.4.1)',
                         action: 'update',
                         scriptId: '580030',
+                        scriptSlug: '580030-steamgifts-unlucky-7-winner-stats-copy',
                         code: fs.readFileSync(path.join(rootDir, 'steamgifts-unlucky-7-winner-stats-copy.user.js'), 'utf8'),
                         description: DESCRIPTIONS['steamgifts-unlucky-7-winner-stats-copy.user.js'],
                         changelog: 'v1.4.1: Added Russian localization (@name:ru, @description:ru) for GreasyFork catalog',

@@ -10,9 +10,13 @@
 // @homepageURL  https://github.com/BasimovIF-AI/steamgifts-userscripts
 // @supportURL   https://github.com/BasimovIF-AI/steamgifts-userscripts/issues
 // @match        https://greasyfork.org/*/script_versions/new*
+// @match        https://greasyfork.org/script_versions/new*
 // @match        https://greasyfork.org/*/scripts/*/versions/new*
+// @match        https://greasyfork.org/scripts/*/versions/new*
 // @match        https://greasyfork.org/*/scripts/*/admin*
+// @match        https://greasyfork.org/scripts/*/admin*
 // @match        https://greasyfork.org/*/scripts/*
+// @match        https://greasyfork.org/scripts/*
 // @grant        GM_xmlhttpRequest
 // @grant        unsafeWindow
 // @connect      127.0.0.1
@@ -26,19 +30,23 @@
 (function() {
     'use strict';
 
-    const params = new URLSearchParams(window.location.search);
-    const bridgePort = params.get('bridge');
-    const jobId = params.get('job');
-    const codeUrl = params.get('auto_code_url');
-    const descUrl = params.get('auto_desc_url');
-    const directDesc = params.get('auto_desc');
-    const directChangelog = params.get('changelog');
+    const searchParams = new URLSearchParams(window.location.search);
+    const hashParams = new URLSearchParams(window.location.hash.startsWith('#') ? window.location.hash.substring(1) : window.location.hash);
+    const getParam = (name) => searchParams.get(name) || hashParams.get(name);
 
-    // 0. Автоматическая цепочка: если скрипт только что создан, переходим в /admin для заполнения описания
+    const bridgePort = getParam('bridge');
+    const jobId = getParam('job');
+    const codeUrl = getParam('auto_code_url');
+    const descUrl = getParam('auto_desc_url');
+    const directDesc = getParam('auto_desc');
+    const directChangelog = getParam('changelog');
+
+    // 0. Автоматическая цепочка: если скрипт только что создан или обновлен, переходим в /admin для заполнения описания
     const pendingDesc = sessionStorage.getItem('gf_pending_desc');
-    if (pendingDesc && window.location.pathname.match(/\/scripts\/\d+-[^\/]+$/)) {
+    if (pendingDesc && window.location.pathname.match(/\/scripts\/\d+(-[^\/]+)?\/?$/)) {
         sessionStorage.removeItem('gf_pending_desc');
-        const nextUrl = window.location.pathname + '/admin?' + (bridgePort ? `bridge=${bridgePort}&job=${jobId || ''}&auto_desc=pending` : `auto_desc=pending`);
+        const cleanPath = window.location.pathname.replace(/\/$/, '');
+        const nextUrl = cleanPath + '/admin?' + (bridgePort ? `bridge=${bridgePort}&job=${jobId || ''}&auto_desc=pending` : `auto_desc=pending`);
         sessionStorage.setItem('gf_pending_desc_text', pendingDesc);
         window.location.href = nextUrl;
         return;
@@ -195,12 +203,15 @@
             dupCheck.dispatchEvent(new Event('change', { bubbles: true }));
         }
 
-        const submitBtn = document.querySelector('input[type="submit"][name="commit"], input[type="submit"], button[type="submit"]');
+        const form = document.querySelector('form.new_script_version, form.edit_script, form.new_script, form[action*="script"]') ||
+                     document.querySelector('#main-script-container form, .text-content form') ||
+                     document.querySelector('form');
+        const submitBtn = form ? form.querySelector('input[type="submit"][name="commit"], input[type="submit"], button[type="submit"]') :
+                                 document.querySelector('input[type="submit"][name="commit"], input[type="submit"], button[type="submit"]');
         if (submitBtn) {
             submitBtn.click();
-        } else {
-            const form = document.querySelector('form');
-            if (form) form.submit();
+        } else if (form) {
+            form.submit();
         }
     }
 
@@ -291,10 +302,10 @@
             }
 
             const isEditDescPage = window.location.pathname.endsWith('/admin');
-            const isNewScriptPage = window.location.pathname.endsWith('/script_versions/new');
+            const isVersionPage = window.location.pathname.includes('/versions/new');
 
-            // Если создаётся новый скрипт и есть описание, запоминаем его для цепочки в /admin
-            if (isNewScriptPage && description) {
+            // Если создаётся новый скрипт или обновляется версия и есть описание, запоминаем его для цепочки в /admin
+            if (isVersionPage && description) {
                 currentPendingDesc = description;
             }
 
