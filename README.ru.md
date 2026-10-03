@@ -12,6 +12,8 @@
 
 Коллекция легковесных и быстрых скриптов для Tampermonkey / Violentmonkey, предназначенных для улучшения и автоматизации работы с сайтом [SteamGifts](https://www.steamgifts.com).
 
+> **Документация:** [AGENTS.md](AGENTS.md) | [CHANGELOG.md](CHANGELOG.md) | [build.ps1](build.ps1)
+
 ---
 
 ## 📦 Обзор скриптов

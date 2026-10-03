@@ -12,6 +12,8 @@
 
 A curated collection of lightweight, high-performance Tampermonkey / Violentmonkey userscripts designed to enhance your experience on [SteamGifts](https://www.steamgifts.com).
 
+> **Documentation:** [AGENTS.md](AGENTS.md) | [CHANGELOG.md](CHANGELOG.md) | [build.ps1](build.ps1)
+
 ---
 
 ## 📦 Scripts Overview
